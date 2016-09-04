@@ -101,9 +101,11 @@
 
 	$("#data-grid").simplrGrid({
 
+		url:"/server/fetch.all.php",
+		method:"POST",
 		title:"Sample Grid",
 		usePager:true,
-		data:jsonData,
+		// data:jsonData,
 		singleSelect:false,
 		columnHide:[
 
@@ -118,22 +120,30 @@
 			width:500,
 			height:500
 		},
+		pager:{
+
+			page:1,
+			rows:10
+		},
 		onDblClick:function(row){
 
 			console.log(row);
 		}
 	});
-	
-	$("#data-grid").tableHeadFixer({
 
-		left:1, 
-		head:true
-	});
+	$(jQuery).ready(function(){
 
-	$('#data-grid th').resizable({
+		$("#data-grid").tableHeadFixer({
 
-        handles: 'e',
-        minWidth: 18
-    });	
+			left:1, 
+			head:true
+		});
+
+		$('#data-grid th').resizable({
+
+	        handles: 'e',
+	        minWidth: 18
+	    });	
+	})
 
 })(jQuery);
