@@ -1,100 +1,37 @@
 <?php
 
-$jsonData = array(
+$fakeData = array("firstnames"=>array("Samuel","Burney","Fred","James","Clark","Charles","John"),
+					"lastnames"=>array("Weru","Rubble","Flinstone","Bond","Kent","Spurgeon","Calvin"),
+					"status"=>array("Active","Pending","Inactive"),
+					"addresses"=>array("Bedrock","Koleni","Lando","Superland","Westbrough"),
+					"emailSuffixes"=>array("gmail.com","ymail.com","hotmail.com"),
+					"employedStatus"=>array("Yes","No","Self"),
+					"marriedStatus"=>array("Yes","No","Not Stated"),
+					"counties"=>array("Nakuru","Nairobi","Kisumu","Fairy Tale", "Winchester","Birmingham"));
 
-	array(
+$number_of_records=50;
 
-		"id"=>2,
-		"firstname"=>"Samuel",
-		"lastname"=>"Weru",
-		"status"=>"Pending",
-		"mobile"=>"N/A",
-		"address"=>"Koleni",
-		"email"=>"samweru@gmail.com",
-		"employed"=>"No",
-		"married"=>"No",
-		"county"=>"Nakuru"
-	),
-	array(
+while($number_of_records>=1){
 
-		"id"=>4,
-		"firstname"=>"Burney",
-		"lastname"=>"Rubble",
-		"status"=>"Active",
-		// "mobile"=>"07228899200",
-		"mobile"=>"0722889920072288992007228899200722889920072288992007228899200722889920072288992007228899200722889920",
-		"address"=>"Bedrock",
-		"email"=>"b.rubble@gmail.com",
-		"employed"=>"Yes",
-		"married"=>"Yes",
-		"county"=>"Fairy Tale Land"
-	),
-	array(
+	$firstname = $fakeData["firstnames"][array_rand($fakeData["firstnames"], 1)];
+	$lastname = $fakeData["lastnames"][array_rand($fakeData["lastnames"], 1)];
+	$emailSuffix = $fakeData["emailSuffixes"][array_rand($fakeData["emailSuffixes"], 1)];
 
-		"id"=>6,
-		"firstname"=>"Fred",
-		"lastname"=>"Flistone",
-		"status"=>"Pending",
-		"mobile"=>"0770234567",
-		"address"=>"Bedrock",
-		"email"=>"fred.stone@gmail.com",
-		"employed"=>"Yes",
-		"married"=>"Yes",
-		"county"=>"Fairy Tale Land"
-	),
-	array(
+	$jsonData[] = array(
 
-		"id"=>8,
-		"firstname"=>"James",
-		"lastname"=>"Bond",
-		"status"=>"Pending",
-		"mobile"=>"0772223344",
-		"address"=>"London",
-		"email"=>"007@gmail.com",
-		"employed"=>"Yes",
-		"married"=>"No",
-		"county"=>"Winchester"
-	),
-	array(
+		"firstname"=>$firstname,
+		"lastname"=>$lastname,
+		"status"=>$fakeData["status"][array_rand($fakeData["status"], 1)],
+		"mobile"=>rand(7777000000,7999999999),
+		"address"=>$fakeData["addresses"][array_rand($fakeData["addresses"], 1)],
+		"email"=>sprintf("%s.%s@%s", strtolower($firstname), strtolower($lastname), $emailSuffix),
+		"employed"=>$fakeData["employedStatus"][array_rand($fakeData["employedStatus"], 1)],
+		"married"=>$fakeData["marriedStatus"][array_rand($fakeData["marriedStatus"], 1)],
+		"county"=>$fakeData["counties"][array_rand($fakeData["counties"], 1)]
+	);
 
-		"id"=>10,
-		"firstname"=>"Clark",
-		"lastname"=>"Kent",
-		"status"=>"Active",
-		"mobile"=>"0778889982",
-		"address"=>"Superland",
-		"email"=>"clark.kent@dailyplanet.com",
-		"employed"=>"Yes",
-		"married"=>"No",
-		"county"=>"Smallville"
-	),
-	array(
-
-		"id"=>12,
-		"firstname"=>"Charles",
-		"lastname"=>"Spurgeon",
-		"status"=>"Active",
-		"mobile"=>"077929293",
-		"address"=>"London",
-		"email"=>"charles.spurgeon@thecalvinist.com",
-		"employed"=>"Yes",
-		"married"=>"Yes",
-		"county"=>"Birmingham"
-	),
-	array(
-
-		"id"=>14,
-		"firstname"=>"John",
-		"lastname"=>"Calvin",
-		"status"=>"Active",
-		"mobile"=>"0778559982",
-		"address"=>"Westbrough",
-		"email"=>"john.calvin@thecalvinist.com",
-		"employed"=>"Yes",
-		"married"=>"Yes",
-		"county"=>"London"
-	)
-);
+	$number_of_records--;
+}
 
 $conn = require("connection.php");
 

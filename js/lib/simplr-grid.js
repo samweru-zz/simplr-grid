@@ -46,10 +46,15 @@
 			title:"Simplr Grid",
     		toolbars:[],
     		usePager:false,
-    		pager:{},
+    		pager:{
+
+    			page:1,
+    			rows:50
+    		},
         	css:{},
-        	data:{},
-        	singleSelect:true
+        	data:[],
+        	singleSelect:true,
+        	method:"POST"
         };
 
 		var settings = $.extend({}, defaults, options);
@@ -233,7 +238,33 @@
 
 	        var capsule = sg.createCapsule();
 
-	        sg.createGrid($(this), settings.data);
+	        var subEl = $(this);
+
+	        if(!!settings.url){
+
+		        $.ajax({
+
+		        	url:settings.url,
+		        	method:settings.method,
+		        	data:{
+
+		        		page:settings.pager.page,
+		        		rows:settings.pager.rows
+		        	}
+		        })
+		        .done(function(response){
+
+		        	sg.createGrid(subEl, response);
+		        })
+		        .fail(function(){
+
+		        	console.log("Ajax Error!");
+		        })
+		    }
+		    else if(!!settings.data){
+
+		    	sg.createGrid($(this), settings.data);
+		    }
 
 	        $(this).wrap(capsule);
 
@@ -247,7 +278,7 @@
 	        });
 			
 			if(settings.usePager)
-				el.before(sg.pager());			
+				el.before(sg.pager());		
 	    });
 	 
 	};	
