@@ -89,6 +89,10 @@
 
 			width:400,
 			height:200
+		},
+		onDblClick:function(row){
+
+			console.log(row);
 		}
 	});
 	

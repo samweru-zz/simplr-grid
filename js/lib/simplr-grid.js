@@ -165,7 +165,26 @@
 				$.each(data, function(i,e){
 
 					var row = $(document.createElement("TR"));
+
+					if(!!_options.onDblClick)
+						row.dblclick(function(evt){
+
+							var cells = $(evt.currentTarget).find("td");
+
+							var cellData = {};
+
+							$.each(cells,function(k,l){
+
+								var field = $(l).attr("field")
+								if(!!field)
+									cellData[field] = $(l).find("div").html();
+							});
+
+							_options.onDblClick(cellData);
+						})
+
 					tbody.append(row);
+
 					row.click(function(evt){
 
 						if(_options.singleSelect)
