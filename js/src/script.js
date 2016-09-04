@@ -62,6 +62,30 @@
 			"employed":"Yes",
 			"married":"No",
 			"county":"Smallville"
+		},
+		{
+			"id":7,
+			"firstname":"Charles",
+			"lastname":"Spurgeon",
+			"status":"Active",
+			"mobile":"077929293",
+			"address":"London",
+			"email":"charles.spurgeon@thecalvinist.com",
+			"employed":"Yes",
+			"married":"Yes",
+			"county":"Birmingham"
+		},
+		{
+			"id":8,
+			"firstname":"John",
+			"lastname":"Calvin",
+			"status":"Active",
+			"mobile":"0778559982",
+			"address":"Westbrough",
+			"email":"john.calvin@thecalvinist.com",
+			"employed":"Yes",
+			"married":"Yes",
+			"county":"London"
 		}
 	];
 
@@ -81,14 +105,18 @@
 		usePager:true,
 		data:jsonData,
 		singleSelect:false,
+		columnHide:[
+
+			"id"
+		],
 		toolbars:[
 
 			[btnAdd, btnSel]
 		],
 		css:{
 
-			width:400,
-			height:200
+			width:500,
+			height:500
 		},
 		onDblClick:function(row){
 
