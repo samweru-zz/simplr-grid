@@ -131,19 +131,4 @@
 		}
 	});
 
-	$(jQuery).ready(function(){
-
-		$("#data-grid").tableHeadFixer({
-
-			left:1, 
-			head:true
-		});
-
-		$('#data-grid').find('th').resizable({
-
-	        handles: 'e',
-	        minWidth: 18
-	    });	
-	})
-
 })(jQuery);

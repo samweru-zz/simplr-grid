@@ -192,8 +192,11 @@
 						rows:parseInt($(this).val())
 					}
 
-					el.children().remove();
-					self.getData(el, settings);
+					var tblEl = el.find(".simplr-grid");
+					tblEl.children().remove();
+					var newTblEl = tblEl.clone();
+					tblEl.replaceWith(newTblEl);
+					self.getData(newTblEl, settings);
 				});
 
 				var ancFirst = $(document.createElement("BUTTON")).html("|<")
@@ -202,8 +205,11 @@
 					settings.pager.page=1
 					txtPageNum.val(settings.pager.page);
 
-					el.children().remove();
-					self.getData(el, settings);
+					var tblEl = el.find(".simplr-grid");
+					tblEl.children().remove();
+					var newTblEl = tblEl.clone();
+					tblEl.replaceWith(newTblEl);
+					self.getData(newTblEl, settings);
 				})
 				var ancPrev = $(document.createElement("BUTTON")).html("<")
 				ancPrev.click(function(){
@@ -213,8 +219,11 @@
 						settings.pager.page--
 						txtPageNum.val(settings.pager.page);
 
-						el.children().remove();
-						self.getData(el, settings);
+						var tblEl = el.find(".simplr-grid");
+						tblEl.children().remove();
+						var newTblEl = tblEl.clone();
+						tblEl.replaceWith(newTblEl);
+						self.getData(newTblEl, settings);
 					}
 				})
 
@@ -226,8 +235,11 @@
 					settings.pager.page++;
 					txtPageNum.val(settings.pager.page);
 
-					el.children().remove();
-					self.getData(el, settings);
+					var tblEl = el.find(".simplr-grid");
+					tblEl.children().remove();
+					var newTblEl = tblEl.clone();
+					tblEl.replaceWith(newTblEl);
+					self.getData(newTblEl, settings);
 				})
 
 				var ancLast = $(document.createElement("BUTTON")).html(">|")
@@ -235,8 +247,11 @@
 				var ancRefresh = $(document.createElement("BUTTON")).html("Refresh")
 				ancRefresh.click(function(){
 
-					el.children().remove();
-					self.getData(el, settings);
+					var tblEl = el.find(".simplr-grid");
+					tblEl.children().remove();
+					var newTblEl = tblEl.clone();
+					tblEl.replaceWith(newTblEl);
+					self.getData(newTblEl, settings);
 				})
 
 				var txtPageNum = $(document.createElement("INPUT"));
@@ -304,7 +319,7 @@
 			        })
 			        .done(function(response){
 
-			        	settings.data = response;
+			        	settings.data = response.rows;
 
 			        	Grid.createHeader(el, settings);
 			        	Grid.createBody(el, settings);
@@ -361,7 +376,7 @@
 	        });
 			
 			if(settings.usePager)
-				el.before(sg.pager($(this)));		
+				el.before(sg.pager(el));		
 	    });
 	 
 	};	
