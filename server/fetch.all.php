@@ -11,6 +11,8 @@ $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 try{
 
+	$count = $conn->query('SELECT COUNT(*) FROM contacts')->fetchColumn(); 
+
 	$stmt = $conn->prepare('SELECT * FROM contacts ORDER BY id LIMIT :start_from , :page_size');
 
 	$stmt->bindParam(':start_from', $start_from, PDO::PARAM_INT);
@@ -22,7 +24,7 @@ try{
 
 	header('Content-Type: application/json');
 	
-	echo json_encode($data);
+	echo json_encode(array("rows"=>$data, "count"=>$count));
 }
 catch(PDOException $e) {
 
