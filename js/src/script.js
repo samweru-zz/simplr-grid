@@ -107,10 +107,10 @@
 		usePager:true,
 		// data:jsonData,
 		singleSelect:false,
-		columnHide:[
+		// columnHide:[
 
-			"id"
-		],
+		// 	"id"
+		// ],
 		toolbars:[
 
 			[btnAdd, btnSel]
@@ -123,7 +123,7 @@
 		pager:{
 
 			page:1,
-			rows:10
+			rows:50
 		},
 		onDblClick:function(row){
 
@@ -139,7 +139,7 @@
 			head:true
 		});
 
-		$('#data-grid th').resizable({
+		$('#data-grid').find('th').resizable({
 
 	        handles: 'e',
 	        minWidth: 18

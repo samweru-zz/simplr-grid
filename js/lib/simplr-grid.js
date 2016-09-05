@@ -37,6 +37,103 @@
 		return rowData;
 	}
 
+	var Grid = {
+
+		createHeader:function(tblEl, options){
+
+			tblEl.addClass("simplr-grid");
+
+			var thead = $(document.createElement("THEAD"));
+			var theadTr = $(document.createElement("TR"));
+
+			thead.append(theadTr);
+			tblEl.append(thead);
+
+			IdCellTh = $(document.createElement("TH"));
+			theadTr.append(IdCellTh);
+
+			var headerList = Object.keys(options.data[0]);
+			$.each(headerList, function(l,m){
+
+				var th = $(document.createElement("TH"));
+				th.append(m[0].toUpperCase() + m.substring(1));
+
+				if($.inArray(m, options.columnHide)!=-1)
+					th.hide();
+
+				theadTr.append(th);
+			});
+		},
+		createBody:function(tblEl, options){
+
+			var tbody = $(document.createElement("TBODY"));
+			tblEl.append(tbody);
+
+			$.each(options.data, function(i,e){
+
+				var row = $(document.createElement("TR"));
+
+				if(!!options.onDblClick)
+					row.dblclick(function(evt){
+
+						var cells = $(evt.currentTarget).find("td");
+
+						var cellData = {};
+
+						$.each(cells,function(k,l){
+
+							var field = $(l).attr("field")
+							if(!!field)
+								cellData[field] = $(l).find("div").html();
+						});
+
+						options.onDblClick(cellData);
+					})
+
+				tbody.append(row);
+
+				row.click(function(evt){
+
+					if(options.singleSelect)
+						$(evt.currentTarget).parent().find("tr.selected").removeClass("selected");
+
+					if($(evt.currentTarget).hasClass("selected"))
+						$(evt.currentTarget).removeClass("selected");
+					else
+						$(evt.currentTarget).addClass("selected");
+				});
+
+				var n=0;
+				$.each(e, function(j,k){
+
+					if(n==0){
+
+						var IdCell = $(document.createElement("TD"));	
+						IdCell.css({textAlign:"right", fontWeight:"bold"});
+						IdCell.html(i+1);
+						row.append(IdCell);
+					}
+
+					var cell = $(document.createElement("TD"));
+					row.append(cell);
+					cell.attr("field", j);
+
+					if($.inArray(j, options.columnHide)!=-1)
+						cell.hide();
+
+					cell.html($(document.createElement("DIV")).html(k));
+
+					n++;
+				});
+			});
+
+			tblEl.css({
+
+				minWidth:"1000px"
+			})
+		}
+	};
+
 	$.fn.simplrGrid = function(options) {
 
 		var defaults = {
@@ -79,7 +176,7 @@
 
 				return divToolbar;
 			},
-			pager:function(){
+			pager:function(el){
 
 				var cboPager = $(document.createElement("SELECT"));
 				$.each(this.options.pageList, function(i,e){
@@ -87,13 +184,63 @@
 					$(cboPager).append(new Option(e))
 				});
 
+				cboPager.change(function(){
+
+					settings.pager = {
+
+						page:1,
+						rows:parseInt($(this).val())
+					}
+
+					el.children().remove();
+					self.getData(el, settings);
+				});
+
 				var ancFirst = $(document.createElement("BUTTON")).html("|<")
+				ancFirst.click(function(){
+
+					settings.pager.page=1
+					txtPageNum.val(settings.pager.page);
+
+					el.children().remove();
+					self.getData(el, settings);
+				})
 				var ancPrev = $(document.createElement("BUTTON")).html("<")
+				ancPrev.click(function(){
+
+					if(settings.pager.page>1){
+
+						settings.pager.page--
+						txtPageNum.val(settings.pager.page);
+
+						el.children().remove();
+						self.getData(el, settings);
+					}
+				})
+
+				var self = this;
+
 				var ancNext = $(document.createElement("BUTTON")).html(">")
+				ancNext.click(function(){
+
+					settings.pager.page++;
+					txtPageNum.val(settings.pager.page);
+
+					el.children().remove();
+					self.getData(el, settings);
+				})
+
 				var ancLast = $(document.createElement("BUTTON")).html(">|")
 
 				var ancRefresh = $(document.createElement("BUTTON")).html("Refresh")
+				ancRefresh.click(function(){
+
+					el.children().remove();
+					self.getData(el, settings);
+				})
+
 				var txtPageNum = $(document.createElement("INPUT"));
+				txtPageNum.val(settings.pager.page);
 				txtPageNum.addClass("page-num").attr("size", 2);
 
 				var sep = "&nbsp;|&nbsp;";
@@ -139,95 +286,57 @@
 
 				return divCapsule;
 			},
-			createGrid:function(tblEl, data){
+			getData:function(el, settings){
 
-				tblEl.addClass("simplr-grid");
+				var self = this;
 
-				var thead = $(document.createElement("THEAD"));
-				var theadTr = $(document.createElement("TR"));
+				if(!!settings.url){
 
-				thead.append(theadTr);
-				tblEl.append(thead);
+			        $.ajax({
 
-				IdCellTh = $(document.createElement("TH"));
-				theadTr.append(IdCellTh);
+			        	url:settings.url,
+			        	method:settings.method,
+			        	data:{
 
-				_options = this.options;
-				$.each(Object.keys(data[0]), function(l,m){
+			        		page:settings.pager.page,
+			        		rows:settings.pager.rows
+			        	}
+			        })
+			        .done(function(response){
 
-					var th = $(document.createElement("TH"));
-					th.append(m[0].toUpperCase() + m.substring(1));
+			        	settings.data = response;
 
-					if($.inArray(m, _options.columnHide)!=-1)
-						th.hide();
+			        	Grid.createHeader(el, settings);
+			        	Grid.createBody(el, settings);
 
-					theadTr.append(th);
-				});
+			        	self.enableAddOns(el);
+			        })
+			        .fail(function(){
 
-				var tbody = $(document.createElement("TBODY"));
-				tblEl.append(tbody);
+			        	console.log("Ajax Error!");
+			        })
+			    }
+			    else if(!!settings.data){
+			    	
+		        	Grid.createHeader(el, settings);
+		        	Grid.createBody(el, settings);
+			    }
+			},
+			enableAddOns:function(el){
 
-				$.each(data, function(i,e){
+				$(jQuery).ready(function(){
 
-					var row = $(document.createElement("TR"));
+					el.tableHeadFixer({
 
-					if(!!_options.onDblClick)
-						row.dblclick(function(evt){
-
-							var cells = $(evt.currentTarget).find("td");
-
-							var cellData = {};
-
-							$.each(cells,function(k,l){
-
-								var field = $(l).attr("field")
-								if(!!field)
-									cellData[field] = $(l).find("div").html();
-							});
-
-							_options.onDblClick(cellData);
-						})
-
-					tbody.append(row);
-
-					row.click(function(evt){
-
-						if(_options.singleSelect)
-							$(evt.currentTarget).parent().find("tr.selected").removeClass("selected");
-
-						if($(evt.currentTarget).hasClass("selected"))
-							$(evt.currentTarget).removeClass("selected");
-						else
-							$(evt.currentTarget).addClass("selected");
+						left:1, 
+						head:true
 					});
 
-					var n=0;
-					$.each(e, function(j,k){
+					el.find('th').resizable({
 
-						if(n==0){
-
-							var IdCell = $(document.createElement("TD"));	
-							IdCell.css({textAlign:"right", fontWeight:"bold"});
-							IdCell.html(i+1);
-							row.append(IdCell);
-						}
-
-						var cell = $(document.createElement("TD"));
-						row.append(cell);
-						cell.attr("field", j);
-
-						if($.inArray(j, _options.columnHide)!=-1)
-							cell.hide();
-
-						cell.html($(document.createElement("DIV")).html(k));
-
-						n++;
-					});
-				});
-
-				tblEl.css({
-
-					minWidth:"1000px"
+				        handles: 'e',
+				        minWidth: 18
+				    });	
 				})
 			}
 		}
@@ -238,33 +347,7 @@
 
 	        var capsule = sg.createCapsule();
 
-	        var subEl = $(this);
-
-	        if(!!settings.url){
-
-		        $.ajax({
-
-		        	url:settings.url,
-		        	method:settings.method,
-		        	data:{
-
-		        		page:settings.pager.page,
-		        		rows:settings.pager.rows
-		        	}
-		        })
-		        .done(function(response){
-
-		        	sg.createGrid(subEl, response);
-		        })
-		        .fail(function(){
-
-		        	console.log("Ajax Error!");
-		        })
-		    }
-		    else if(!!settings.data){
-
-		    	sg.createGrid($(this), settings.data);
-		    }
+	        sg.getData($(this), settings);
 
 	        $(this).wrap(capsule);
 
@@ -272,13 +355,13 @@
 
 	        el.before(sg.createTitle(settings.title));
 
-	        $.each(settings.toolbars, function(i,e){
+	        $.each(settings.toolbars, function(i, e){
 
 	        	el.before(sg.addToolbar(e));
 	        });
 			
 			if(settings.usePager)
-				el.before(sg.pager());		
+				el.before(sg.pager($(this)));		
 	    });
 	 
 	};	
