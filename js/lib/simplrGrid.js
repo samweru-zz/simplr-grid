@@ -177,7 +177,7 @@
 
 				return divToolbar;
 			},
-			_newTblEl:function(el){
+			_reTblEl:function(el){
 
 				this.options.__initGrid = false;
 
@@ -203,7 +203,7 @@
 						rows:parseInt($(this).val())
 					}
 
-					self.getData(self._newTblEl(el), settings);
+					self.getData(self._reTblEl(el), settings);
 				});
 
 				var ancFirst = $(document.createElement("BUTTON")).html("|<")
@@ -214,7 +214,7 @@
 						settings.pager.page=1
 						txtPageNum.val(settings.pager.page);
 
-						self.getData(self._newTblEl(el), settings);
+						self.getData(self._reTblEl(el), settings);
 					}
 				})
 
@@ -226,7 +226,7 @@
 						settings.pager.page--
 						txtPageNum.val(settings.pager.page);
 
-						self.getData(self._newTblEl(el), settings);
+						self.getData(self._reTblEl(el), settings);
 					}
 				})
 
@@ -236,7 +236,7 @@
 					settings.pager.page++;
 					txtPageNum.val(settings.pager.page);
 
-					self.getData(self._newTblEl(el), settings);
+					self.getData(self._reTblEl(el), settings);
 				})
 
 				var ancLast = $(document.createElement("BUTTON")).html(">|")
@@ -244,7 +244,7 @@
 				var ancRefresh = $(document.createElement("BUTTON")).html("Refresh")
 				ancRefresh.click(function(){
 
-					self.getData(self._newTblEl(el), settings);
+					self.getData(self._reTblEl(el), settings);
 				})
 
 				var txtPageNum = $(document.createElement("INPUT"));
@@ -319,8 +319,7 @@
 
 			        	Grid.createBody(el, settings);
 
-			        	if(settings.__initGrid)
-			        		self.enableAddOns(el);
+			        	self.enableAddOns(el);
 			        })
 			        .fail(function(){
 
@@ -337,20 +336,31 @@
 			},
 			enableAddOns:function(el){
 
-				$(jQuery).ready(function(){
+				if(settings.__initGrid){
 
-					el.tableHeadFixer({
+					if(jQuery.fn.tableHeadFixer)
+						el.tableHeadFixer({
 
-						left:1,
-						head:true
-					});
+							left:1,
+							head:true
+						});
 
-					el.find('th').resizable({
+					if(jQuery.fn.resizable)
+						el.find('th').resizable({
 
-				        handles: 'e',
-				        minWidth: 18
-				    });	
-				})
+					        handles: 'e',
+					        minWidth: 18
+					    });	
+				}
+				else{
+
+					if(jQuery.fn.tableHeadFixer)
+						el.tableHeadFixer({
+
+							left:1,
+							head:false
+						});
+				}
 			}
 		}
  

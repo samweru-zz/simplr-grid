@@ -10,3 +10,5 @@ catch(PDOException $e) {
 
     echo sprintf("SQLDEL ERROR %s", $e->getMessage());
 }
+
+unset($conn);
