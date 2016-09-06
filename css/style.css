@@ -40,7 +40,21 @@
 	width: 100%;
 	padding: 0;
 	margin: 0;
+	overflow: auto;
+	/*overflow-y:scroll;*/
 }
+
+/*.simplr-grid{
+
+	position: relative;
+}
+
+.simplr-grid tr td:first-child{
+
+	position:fixed; 
+	float: left;
+	display: block;
+}*/
 
 .simplr-grid{
 

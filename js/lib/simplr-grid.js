@@ -151,7 +151,8 @@
         	css:{},
         	data:[],
         	singleSelect:true,
-        	method:"POST"
+        	method:"POST",
+        	__initGrid:true
         };
 
 		var settings = $.extend({}, defaults, options);
@@ -176,7 +177,17 @@
 
 				return divToolbar;
 			},
+			_newTblEl:function(el){
+
+				this.options.__initGrid = false;
+
+				el.find(".simplr-grid tbody").remove();
+
+				return el.find(".simplr-grid");
+			},
 			pager:function(el){
+
+				var self = this;
 
 				var cboPager = $(document.createElement("SELECT"));
 				$.each(this.options.pageList, function(i,e){
@@ -192,25 +203,21 @@
 						rows:parseInt($(this).val())
 					}
 
-					var tblEl = el.find(".simplr-grid");
-					tblEl.children().remove();
-					var newTblEl = tblEl.clone();
-					tblEl.replaceWith(newTblEl);
-					self.getData(newTblEl, settings);
+					self.getData(self._newTblEl(el), settings);
 				});
 
 				var ancFirst = $(document.createElement("BUTTON")).html("|<")
 				ancFirst.click(function(){
 
-					settings.pager.page=1
-					txtPageNum.val(settings.pager.page);
+					if(settings.pager.page>1){
 
-					var tblEl = el.find(".simplr-grid");
-					tblEl.children().remove();
-					var newTblEl = tblEl.clone();
-					tblEl.replaceWith(newTblEl);
-					self.getData(newTblEl, settings);
+						settings.pager.page=1
+						txtPageNum.val(settings.pager.page);
+
+						self.getData(self._newTblEl(el), settings);
+					}
 				})
+
 				var ancPrev = $(document.createElement("BUTTON")).html("<")
 				ancPrev.click(function(){
 
@@ -219,15 +226,9 @@
 						settings.pager.page--
 						txtPageNum.val(settings.pager.page);
 
-						var tblEl = el.find(".simplr-grid");
-						tblEl.children().remove();
-						var newTblEl = tblEl.clone();
-						tblEl.replaceWith(newTblEl);
-						self.getData(newTblEl, settings);
+						self.getData(self._newTblEl(el), settings);
 					}
 				})
-
-				var self = this;
 
 				var ancNext = $(document.createElement("BUTTON")).html(">")
 				ancNext.click(function(){
@@ -235,11 +236,7 @@
 					settings.pager.page++;
 					txtPageNum.val(settings.pager.page);
 
-					var tblEl = el.find(".simplr-grid");
-					tblEl.children().remove();
-					var newTblEl = tblEl.clone();
-					tblEl.replaceWith(newTblEl);
-					self.getData(newTblEl, settings);
+					self.getData(self._newTblEl(el), settings);
 				})
 
 				var ancLast = $(document.createElement("BUTTON")).html(">|")
@@ -247,11 +244,7 @@
 				var ancRefresh = $(document.createElement("BUTTON")).html("Refresh")
 				ancRefresh.click(function(){
 
-					var tblEl = el.find(".simplr-grid");
-					tblEl.children().remove();
-					var newTblEl = tblEl.clone();
-					tblEl.replaceWith(newTblEl);
-					self.getData(newTblEl, settings);
+					self.getData(self._newTblEl(el), settings);
 				})
 
 				var txtPageNum = $(document.createElement("INPUT"));
@@ -321,10 +314,13 @@
 
 			        	settings.data = response.rows;
 
-			        	Grid.createHeader(el, settings);
+			        	if(settings.__initGrid)
+			        		Grid.createHeader(el, settings);
+
 			        	Grid.createBody(el, settings);
 
-			        	self.enableAddOns(el);
+			        	if(settings.__initGrid)
+			        		self.enableAddOns(el);
 			        })
 			        .fail(function(){
 
@@ -333,7 +329,9 @@
 			    }
 			    else if(!!settings.data){
 			    	
-		        	Grid.createHeader(el, settings);
+		        	if(settings.__initGrid)
+		        		Grid.createHeader(el, settings);
+
 		        	Grid.createBody(el, settings);
 			    }
 			},
@@ -343,7 +341,7 @@
 
 					el.tableHeadFixer({
 
-						left:1, 
+						left:1,
 						head:true
 					});
 
@@ -356,7 +354,7 @@
 			}
 		}
  
-	    return this.each(function() {
+	    return this.each(function(){
 
 	        var sg = new SimplrGrid(settings);
 
