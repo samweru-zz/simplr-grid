@@ -31,3 +31,5 @@ catch(PDOException $e) {
     echo sprintf("SQLFETCH ERROR %s", $e->getMessage());
 }
 
+unset($conn);
+
