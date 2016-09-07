@@ -44,7 +44,7 @@ $("#data-grid").simplrGrid({
 
 ## Plugins
 
-simplrGrid - is a plugin by itself but also includes other plugins that assist in grid functionality. They can be used individually but with some adjustment to your code.
+`simplrGrid` - is a plugin by itself but also includes other plugins that are already used in grid functionality. If you so wish to use them individually on other elements you may do so but with some adjustment to your code.
 
 1. `resizeHeader` - to use place empty `span` element in `th`  as resize handler
 2. `getSelected` - gets single table row anything which has class `selected`
