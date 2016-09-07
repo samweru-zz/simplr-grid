@@ -3,11 +3,10 @@ Simplr Grid
 
 #jQuery DataGrid
 
-## Tools Grid
+## Contributions
 
-The tools below are helpful and included in the project but are <b>OPTIONAL</b>:
+Thanks a lot to the developer(s) of the plugin(s) below: 
 
-1. [TableHeadFixer](https://github.com/lai32290/TableHeadFixer) - Freezing Table Headers
-2. [jQuery UI](https://jqueryui.com/) - Resizing Columns
+[TableHeadFixer](https://github.com/lai32290/TableHeadFixer)
 
 Have fun!

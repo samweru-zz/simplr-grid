@@ -1,5 +1,173 @@
 (function($){
 
+	$.fn.resizeHeader = function(){
+
+	    return this.each(function(){
+
+	    	var pressed = false;
+		    var start = undefined;
+		    var startX, startWidth;
+
+	    	$(this).find("th span").mousedown(function(e){
+
+		        start = $(this)
+		        pressed = true;
+		        startX = e.pageX;
+		        startWidth = start.width();
+			});
+		    
+		    $(document).mousemove(function(e){
+
+	        	if(pressed)
+	            	$(start).width(startWidth+(e.pageX-startX));
+		    });
+		    
+		    $(document).mouseup(function(){
+
+		        if(pressed)
+		            pressed = false;
+		    });
+	    });
+	}
+
+	$.fn.fixHeader = function(){
+
+		var settings = {
+
+			head: true
+		}
+
+		return this.each(function(){
+
+			setParent($(this));
+
+			fixHead($(this));
+		});
+
+		// Set style of table parent
+		function setParent(table){
+
+			var parent = table.parent();
+			parent.append(table);
+			parent.css({
+
+				'overflow-x' : 'auto',
+				'overflow-y' : 'auto'
+			});
+
+			parent.scroll(function() {
+
+				var top = parent.scrollTop();
+
+				this.find("thead tr > *").css("top", top);
+
+			}.bind(table));
+		}
+
+		// Set table head fixed
+		function fixHead(table){
+			
+			var thead = table.find("thead");
+			var tr = thead.find("tr");
+			var cells = thead.find("tr > *");
+
+			cells.css({
+
+				'position' : 'relative'
+			});
+		}
+	};
+
+	$.fn.fixLeftColumn = function(param) {
+
+		param = param || {};
+
+		var defaults = {
+
+			left: 1
+		};
+
+		var settings = $.extend({}, defaults, param);
+
+		return this.each(function(){
+
+			setParent($(this));
+			fixLeft($(this));
+
+			$(this).parent().trigger("scroll");
+
+			$(window).resize(function() {
+
+				$(this).parent().trigger("scroll");
+			});
+		});
+
+		// Set style of table parent
+		function setParent(table){
+
+			var parent = table.parent();
+			parent.append(table);
+			parent.css({
+
+				'overflow-x' : 'auto',
+				'overflow-y' : 'auto'
+			});
+
+			parent.scroll(function(){
+
+				var left = parent.scrollLeft();
+
+				if(settings.left > 0)
+					settings.leftColumns.css("left", left);
+
+			}.bind(table));
+		}
+
+		// Set table left column fixed
+		function fixLeft(table){
+
+			settings.leftColumns = $();
+
+			var tr = table.find("tr");
+			tr.each(function(k, row){
+
+				solverLeftColspan(row, function(cell){
+
+					settings.leftColumns = settings.leftColumns.add(cell);
+				});
+			});
+
+			var column = settings.leftColumns;
+			column.each(function(k, cell){
+
+				var cell = $(cell);
+
+				cell.css({
+
+					'position' : 'relative'
+				});
+			});
+		}
+
+		function solverLeftColspan(row, action){
+
+			var fixColumn = settings.left;
+			var inc = 1;
+
+			for(var i = 1; i <= fixColumn; i = i + inc){
+
+				var nth = inc > 1 ? i - 1 : i;
+
+				var cell = $(row).find("> *:nth-child(" + nth + ")");
+				var colspan = cell.prop("colspan");
+
+				action(cell);
+
+				inc = colspan;
+			}
+		}
+	};
+
 	$.fn.getSelected = function(){
 
 		var cells = $(this).find("tr.selected:first td");
@@ -37,9 +205,32 @@
 		return rowData;
 	}
 
-	var Grid = {
+	$.fn.simplrGrid = function(options){
 
-		createHeader:function(tblEl, options){
+		var defaults = {
+
+			columnHide:[],
+			pageList:[50,40,30,20,10],
+			title:"Simplr Grid",
+    		toolbars:[],
+    		pager:{
+
+    			page:1,
+    			rows:50
+    		},
+        	css:{},
+        	data:[],
+        	method:"POST",
+        	singleSelect:true,
+        	resizeColumns:true,
+        	freezeLeftColumn:true,
+        	freezeHeader:true,
+        	usePager:false,
+        };
+
+		var settings = $.extend({__initGrid:true}, defaults, options);
+
+		function createHeader(tblEl, options){
 
 			tblEl.addClass("simplr-grid");
 
@@ -58,13 +249,17 @@
 				var th = $(document.createElement("TH"));
 				th.append(m[0].toUpperCase() + m.substring(1));
 
+				if(options.resizeColumns)
+					th.append($("<span>&nbsp;</span>"))
+
 				if($.inArray(m, options.columnHide)!=-1)
 					th.hide();
 
 				theadTr.append(th);
 			});
-		},
-		createBody:function(tblEl, options){
+		}
+
+		function createBody(tblEl, options){
 
 			var tbody = $(document.createElement("TBODY"));
 			tblEl.append(tbody);
@@ -132,30 +327,6 @@
 				minWidth:"1000px"
 			})
 		}
-	};
-
-	$.fn.simplrGrid = function(options) {
-
-		var defaults = {
-
-			columnHide:[],
-			pageList:[50,40,30,20,10],
-			title:"Simplr Grid",
-    		toolbars:[],
-    		usePager:false,
-    		pager:{
-
-    			page:1,
-    			rows:50
-    		},
-        	css:{},
-        	data:[],
-        	singleSelect:true,
-        	method:"POST",
-        	__initGrid:true
-        };
-
-		var settings = $.extend({}, defaults, options);
 
 		var SimplrGrid = function(options){
 
@@ -185,9 +356,17 @@
 
 				return el.find(".simplr-grid");
 			},
+			_cfgPager:function(config){
+
+				this.options.pager = $.extend(this.options.pager, config);
+			},
 			pager:function(el){
 
 				var self = this;
+
+				var txtPageNum = $(document.createElement("INPUT"));
+				txtPageNum.val(this.options.pager.page);
+				txtPageNum.addClass("page-num").attr("size", 2);
 
 				var cboPager = $(document.createElement("SELECT"));
 				$.each(this.options.pageList, function(i,e){
@@ -197,46 +376,48 @@
 
 				cboPager.change(function(){
 
-					settings.pager = {
+					self._cfgPager({
 
 						page:1,
 						rows:parseInt($(this).val())
-					}
+					});
 
-					self.getData(self._reTblEl(el), settings);
+					txtPageNum.val(1);
+
+					self.getData(self._reTblEl(el));
 				});
 
 				var ancFirst = $(document.createElement("BUTTON")).html("|<")
 				ancFirst.click(function(){
 
-					if(settings.pager.page>1){
+					if(self.options.pager.page>1){
 
-						settings.pager.page=1
-						txtPageNum.val(settings.pager.page);
+						self.options.pager.page=1
+						txtPageNum.val(self.options.pager.page);
 
-						self.getData(self._reTblEl(el), settings);
+						self.getData(self._reTblEl(el));
 					}
 				})
 
 				var ancPrev = $(document.createElement("BUTTON")).html("<")
 				ancPrev.click(function(){
 
-					if(settings.pager.page>1){
+					if(self.options.pager.page>1){
 
-						settings.pager.page--
-						txtPageNum.val(settings.pager.page);
+						self.options.pager.page--
+						txtPageNum.val(self.options.pager.page);
 
-						self.getData(self._reTblEl(el), settings);
+						self.getData(self._reTblEl(el));
 					}
 				})
 
 				var ancNext = $(document.createElement("BUTTON")).html(">")
 				ancNext.click(function(){
 
-					settings.pager.page++;
-					txtPageNum.val(settings.pager.page);
+					self.options.pager.page++;
+					txtPageNum.val(self.options.pager.page);
 
-					self.getData(self._reTblEl(el), settings);
+					self.getData(self._reTblEl(el));
 				})
 
 				var ancLast = $(document.createElement("BUTTON")).html(">|")
@@ -244,12 +425,10 @@
 				var ancRefresh = $(document.createElement("BUTTON")).html("Refresh")
 				ancRefresh.click(function(){
 
-					self.getData(self._reTblEl(el), settings);
-				})
+					self._cfgPager({page:txtPageNum.val()});
 
-				var txtPageNum = $(document.createElement("INPUT"));
-				txtPageNum.val(settings.pager.page);
-				txtPageNum.addClass("page-num").attr("size", 2);
+					self.getData(self._reTblEl(el));
+				})
 
 				var sep = "&nbsp;|&nbsp;";
 
@@ -264,11 +443,11 @@
 					ancRefresh
 				]);
 			},
-			createTitle:function(title){
+			createTitle:function(){
 
 				var spanCap = $(document.createElement("DIV"));
 				spanCap.addClass("simplr-grid-title")
-				spanCap.html("&nbsp;".concat(title));
+				spanCap.html("&nbsp;".concat(this.options.title));
 
 				return spanCap;
 			},
@@ -282,7 +461,7 @@
 
 				divCapsule.css({
 
-					maxWidth:this.options.css.width
+					width:this.options.css.width
 				});
 
 				divCapsuleBody.css({
@@ -294,30 +473,30 @@
 
 				return divCapsule;
 			},
-			getData:function(el, settings){
+			getData:function(el){
 
 				var self = this;
 
-				if(!!settings.url){
+				if(!!this.options.url){
 
 			        $.ajax({
 
-			        	url:settings.url,
-			        	method:settings.method,
+			        	url:this.options.url,
+			        	method:this.options.method,
 			        	data:{
 
-			        		page:settings.pager.page,
-			        		rows:settings.pager.rows
+			        		page:this.options.pager.page,
+			        		rows:this.options.pager.rows
 			        	}
 			        })
 			        .done(function(response){
 
-			        	settings.data = response.rows;
+			        	self.options.data = response.rows;
 
-			        	if(settings.__initGrid)
-			        		Grid.createHeader(el, settings);
+			        	if(self.options.__initGrid)
+			        		createHeader(el, self.options);
 
-			        	Grid.createBody(el, settings);
+			        	createBody(el, self.options);
 
 			        	self.enableAddOns(el);
 			        })
@@ -326,41 +505,29 @@
 			        	console.log("Ajax Error!");
 			        })
 			    }
-			    else if(!!settings.data){
+			    else if(!!this.options.data){
 			    	
-		        	if(settings.__initGrid)
-		        		Grid.createHeader(el, settings);
+		        	if(this.options.__initGrid)
+		        		createHeader(el, this.options);
 
-		        	Grid.createBody(el, settings);
+		        	createBody(el, this.options);
 			    }
 			},
 			enableAddOns:function(el){
 
-				if(settings.__initGrid){
+				if(this.options.__initGrid){
 
-					if(jQuery.fn.tableHeadFixer)
-						el.tableHeadFixer({
+					if(this.options.freezeLeftColumn)
+						el.fixLeftColumn();
 
-							left:1,
-							head:true
-						});
+					if(this.options.freezeHeader)
+						el.fixHeader();
 
-					if(jQuery.fn.resizable)
-						el.find('th').resizable({
-
-					        handles: 'e',
-					        minWidth: 18
-					    });	
+					if(this.options.resizeColumns)
+						el.resizeHeader();
 				}
-				else{
-
-					if(jQuery.fn.tableHeadFixer)
-						el.tableHeadFixer({
-
-							left:1,
-							head:false
-						});
-				}
+				else
+					el.fixLeftColumn();
 			}
 		}
  
@@ -370,13 +537,13 @@
 
 	        var capsule = sg.createCapsule();
 
-	        sg.getData($(this), settings);
+	        sg.getData($(this));
 
 	        $(this).wrap(capsule);
 
 	        var el = $(this).parent();
 
-	        el.before(sg.createTitle(settings.title));
+	        el.before(sg.createTitle());
 
 	        $.each(settings.toolbars, function(i, e){
 
