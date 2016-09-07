@@ -425,7 +425,7 @@
 				var ancRefresh = $(document.createElement("BUTTON")).html("Refresh")
 				ancRefresh.click(function(){
 
-					self._cfgPager({page:txtPageNum.val()});
+					self._cfgPager({page:parseInt(txtPageNum.val())});
 
 					self.getData(self._reTblEl(el));
 				})
@@ -551,7 +551,7 @@
 	        });
 			
 			if(settings.usePager)
-				el.before(sg.pager(el));		
+				el.before(sg.pager(el));
 	    });
 	 
 	};	
