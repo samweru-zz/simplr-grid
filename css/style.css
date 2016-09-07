@@ -87,6 +87,11 @@
 	white-space: nowrap;
 }
 
+.simplr-grid tr:nth-child(even) {
+
+    background-color: #f5f5f5;
+}
+
 .simplr-grid tbody tr.selected{
 
 	background-color: #888;
