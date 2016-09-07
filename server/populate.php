@@ -1,7 +1,19 @@
 <?php
 
-$fakeData = array("firstnames"=>array("Samuel","Burney","Fred","James","Clark","Charles","John"),
-					"lastnames"=>array("Weru","Rubble","Flinstone","Bond","Kent","Spurgeon","Calvin"),
+$firstnames = array("Carmel","Rosio","Tierra","Princess","Lakeisha","Frances","Cleo","Yuk","Ha","Francisca","Belle",
+"Delphine","Tyesha","Michael","Peter","Chauncey","Randee","Jed","Veola","Morris","Sallie","Bao","Bernard",
+"Marietta","Eleanor","Felica","Clarine","Morgan","Joanie","Raquel","Lakia","Micah","Sheena","Kenneth","Sharyl",
+"Dena","Marcus","Sumiko","Tasha","Chiquita","Makeda","Chun","Brook","Ramiro","Zulma","Krista","Virgilio",
+"Clare","Kent","Millard");
+
+$lastnames = array("Spielman","Ertel","Bresnahan","Alvelo","Hysell","Sinquefield","Mcfall","Effinger","Brenner","Batton",
+"Bowens","Seibert","Hedgecock","Sher","Sereno","Stutz","Saterfiel","Hoeppner","Galbraith","Hepburn","Demmer","Respass",
+"Boyland","Bouchard","Farrer","Beson","Leatherman","Ramos","Sickler","Allbright","Prickett","Fansler","Weathersby","Driskell",
+"Ospina","Sabella","Naylor","Dreiling","Lemaire","Pratt","Highfield","Dostie","Foxwell","Huffman","Delzell","Haddock","Matz",
+"Difiore","Abrev","Koelling");
+
+$fakeData = array("firstnames"=>$firstnames,
+					"lastnames"=>$lastnames,
 					"status"=>array("Active","Pending","Inactive"),
 					"addresses"=>array("Bedrock","Koleni","Lando","Superland","Westbrough"),
 					"emailSuffixes"=>array("gmail.com","ymail.com","hotmail.com"),
