@@ -35,7 +35,7 @@ $("#data-grid").simplrGrid({
         rows:10//,
         // list:[10,20]
     },
-    onDblClick:function(row){
+    onDblClick:function(row){//row double click event
 
         console.log(row);
     }
@@ -44,13 +44,13 @@ $("#data-grid").simplrGrid({
 
 ## Plugins
 
-`simplrGrid` - is a plugin by itself but also includes other plugins that are already used in grid functionality. If you so wish to use them individually on other elements you may do so but with some adjustment to your code.
+`simplrGrid` - is a plugin by itself but also includes other plugins that are already used in grid functionality. If you so wish to use them individually on other elements, you may do so but with some adjustment to your code.
 
-1. `resizeHeader` - to use place empty `span` element in `th`  as resize handler
-2. `getSelected` - gets single table row which has class `selected` as json
-3. `getAllSelected` - gets multiple table rows with class `selected` as json list
-4. `fixHeader`
-5. `fixLeftColumn`
+1. `resizeHeader` - place empty `span` in `th`  to act as resize handler
+2. `getSelected` - gets single or first `tr.selected` (returns json)
+3. `getAllSelected` - gets multiple `tr.selected` (returns json list)
+4. `fixHeader` - ready to use
+5. `fixLeftColumn` - ready to use
 
 ## Contributions
 
