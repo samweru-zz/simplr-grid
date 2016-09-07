@@ -44,7 +44,6 @@
 			fixHead($(this));
 		});
 
-		// Set style of table parent
 		function setParent(table){
 
 			var parent = table.parent();
@@ -64,7 +63,6 @@
 			}.bind(table));
 		}
 
-		// Set table head fixed
 		function fixHead(table){
 			
 			var thead = table.find("thead");
@@ -78,16 +76,12 @@
 		}
 	};
 
-	$.fn.fixLeftColumn = function(param) {
+	$.fn.fixLeftColumn = function() {
 
-		param = param || {};
-
-		var defaults = {
+		var settings = {
 
 			left: 1
-		};
-
-		var settings = $.extend({}, defaults, param);
+		}
 
 		return this.each(function(){
 
@@ -102,7 +96,6 @@
 			});
 		});
 
-		// Set style of table parent
 		function setParent(table){
 
 			var parent = table.parent();
@@ -123,7 +116,6 @@
 			}.bind(table));
 		}
 
-		// Set table left column fixed
 		function fixLeft(table){
 
 			settings.leftColumns = $();
@@ -230,7 +222,6 @@
 
         options.pager = $.extend({}, defaults.pager, options.pager);
 		var settings = $.extend({__initGrid:true}, defaults, options);
-		
 
 		function createHeader(tblEl, options){
 
@@ -503,11 +494,11 @@
 			},
 			createTitle:function(){
 
-				var spanCap = $(document.createElement("DIV"));
-				spanCap.addClass("simplr-grid-title")
-				spanCap.html("&nbsp;".concat(this.options.title));
+				var divTitle = $(document.createElement("DIV"));
+				divTitle.addClass("simplr-grid-title")
+				divTitle.html("&nbsp;".concat(this.options.title));
 
-				return spanCap;
+				return divTitle;
 			},
 			createCapsule:function(){
 
