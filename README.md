@@ -1,8 +1,6 @@
 Simplr Grid
 ===========
 
-#jQuery DataGrid
-
 ## Usage
 
 ```js
@@ -48,11 +46,11 @@ $("#data-grid").simplrGrid({
 
 simplrGrid - is a plugin by itself but also includes other plugins that assist in grid functionality. They can be used individually but with some adjustment to your code.
 
-1. resizeHeader - to use place empty `span` element in `th`  as resize handler
-2. fixHeader
-3. fixLeftColumn
-4. getSelected - gets single table row anything which has class `selected`
-5. getAllSelected - gets multiple table rows with class `selected`
+1. `resizeHeader` - to use place empty `span` element in `th`  as resize handler
+2. `fixHeader`
+3. `fixLeftColumn`
+4. `getSelected` - gets single table row anything which has class `selected`
+5. `getAllSelected` - gets multiple table rows with class `selected`
 
 ## Contributions
 
