@@ -266,6 +266,10 @@
 			var tbody = $(document.createElement("TBODY"));
 			tblEl.append(tbody);
 
+			var pageNo = parseInt(options.pager.page);
+			var pageSize = parseInt(options.pager.rows);
+			var startFrom = ((pageNo - 1) * pageSize)+1;
+
 			$.each(options.data, function(i,e){
 
 				var row = $(document.createElement("TR"));
@@ -307,7 +311,7 @@
 
 						var IdCell = $(document.createElement("TD"));	
 						IdCell.css({textAlign:"right", fontWeight:"bold"});
-						IdCell.html(i+1);
+						IdCell.html(startFrom++);
 						row.append(IdCell);
 					}
 
@@ -388,7 +392,7 @@
 
 					$(cboPager).append(new Option(e))
 				});
-				
+
 				$(cboPager).val(this.options.pager.rows);
 
 				cboPager.change(function(){
