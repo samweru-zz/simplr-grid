@@ -5,7 +5,7 @@ $conn = require("connection.php");
 $page_no = $_REQUEST["page"];
 $page_size = $_REQUEST["rows"];
 
-$start_from = ($page_no - 1) * $page_size + 1;
+$start_from = ($page_no - 1) * $page_size;
 
 $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 

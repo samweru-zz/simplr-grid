@@ -23,7 +23,7 @@
 		// resizeColumns:false,
 		columnHide:[
 
-			"id"
+			// "id"
 		],
 		toolbars:[
 
