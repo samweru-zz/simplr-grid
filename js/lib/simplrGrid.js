@@ -209,14 +209,14 @@
 
 		var defaults = {
 
-			columnHide:[],
-			pageList:[50,40,30,20,10],
 			title:"Simplr Grid",
+			columnHide:[],
     		toolbars:[],
     		pager:{
 
     			page:1,
-    			rows:50
+    			rows:50,
+    			list:[50,40,30,20,10]
     		},
         	css:{},
         	data:[],
@@ -228,7 +228,9 @@
         	usePager:false,
         };
 
+        options.pager = $.extend({}, defaults.pager, options.pager);
 		var settings = $.extend({__initGrid:true}, defaults, options);
+		
 
 		function createHeader(tblEl, options){
 
@@ -369,6 +371,10 @@
 
 				this.options.pager = $.extend(this.options.pager, config);
 			},
+			_calcPages:function(){
+
+				return calcNumberOfPages(this.options.pager.count, this.options.pager.rows);
+			},
 			pager:function(el){
 
 				var self = this;
@@ -378,20 +384,24 @@
 				txtPageNum.addClass("page-num").attr("size", 2);
 
 				var cboPager = $(document.createElement("SELECT"));
-				$.each(this.options.pageList, function(i,e){
+				$.each(this.options.pager.list, function(i,e){
 
 					$(cboPager).append(new Option(e))
 				});
+				
+				$(cboPager).val(this.options.pager.rows);
 
 				cboPager.change(function(){
 
+					var startAtPage = 1;
+
 					self._cfgPager({
 
-						page:1,
+						page:startAtPage,
 						rows:parseInt($(this).val())
 					});
 
-					txtPageNum.val(1);
+					txtPageNum.val(startAtPage);
 
 					self.getData(self._reTblEl(el));
 				});
@@ -423,7 +433,7 @@
 				var ancNext = $(document.createElement("BUTTON")).html(">")
 				ancNext.click(function(){
 
-					var numOfPages = calcNumberOfPages(self.options.pager.count, self.options.pager.rows);
+					var numOfPages = self._calcPages();
 					var currPage = parseInt(self.options.pager.page);
 
 					if(currPage<numOfPages){
@@ -438,7 +448,7 @@
 				var ancLast = $(document.createElement("BUTTON")).html(">|")
 				ancLast.click(function(){
 
-					var lastPage = calcNumberOfPages(self.options.pager.count, self.options.pager.rows);
+					var lastPage = self._calcPages();
 					var currPage = parseInt(self.options.pager.page);
 
 					if(currPage<lastPage){
@@ -453,7 +463,7 @@
 				var ancRefresh = $(document.createElement("BUTTON")).html("Refresh")
 				ancRefresh.click(function(){
 
-					var lastPage = calcNumberOfPages(self.options.pager.count, self.options.pager.rows);
+					var lastPage = self._calcPages();
 					var expectedPageNo = txtPageNum.val();
 
 					var pageNo = 1;
@@ -544,7 +554,7 @@
 
 			        	createBody(el, self.options);
 
-			        	var numOfPages = calcNumberOfPages(self.options.pager.count, self.options.pager.rows);
+			        	var numOfPages = self._calcPages();
 
 			        	el.parent().parent().find(".num-of-pages").html(numOfPages);
 

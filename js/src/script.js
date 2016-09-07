@@ -37,7 +37,8 @@
 		pager:{
 
 			page:1,
-			rows:50
+			rows:10//,
+			// list:[10,20]
 		},
 		onDblClick:function(row){
 
