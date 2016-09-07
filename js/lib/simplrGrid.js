@@ -10,7 +10,7 @@
 
 	    	$(this).find("th span").mousedown(function(e){
 
-		        start = $(this)
+		        start = $(this).parent()
 		        pressed = true;
 		        startX = e.pageX;
 		        startWidth = start.width();
@@ -328,6 +328,15 @@
 			})
 		}
 
+		function calcNumberOfPages(_totalNumberOfRows, _rowsPerPage){
+
+			var totalNumOfRows = parseInt(_totalNumberOfRows);
+        	var rowsPerPage = parseInt(_rowsPerPage);
+        	var numOfPages = Math.ceil(totalNumOfRows/rowsPerPage);
+
+        	return numOfPages;
+		}
+
 		var SimplrGrid = function(options){
 
 			this.options = options;
@@ -414,32 +423,67 @@
 				var ancNext = $(document.createElement("BUTTON")).html(">")
 				ancNext.click(function(){
 
-					self.options.pager.page++;
-					txtPageNum.val(self.options.pager.page);
+					var numOfPages = calcNumberOfPages(self.options.pager.count, self.options.pager.rows);
+					var currPage = parseInt(self.options.pager.page);
 
-					self.getData(self._reTblEl(el));
+					if(currPage<numOfPages){
+
+						self.options.pager.page++;
+						txtPageNum.val(self.options.pager.page);
+
+						self.getData(self._reTblEl(el));
+					}
 				})
 
 				var ancLast = $(document.createElement("BUTTON")).html(">|")
+				ancLast.click(function(){
+
+					var lastPage = calcNumberOfPages(self.options.pager.count, self.options.pager.rows);
+					var currPage = parseInt(self.options.pager.page);
+
+					if(currPage<lastPage){
+
+						self.options.pager.page = lastPage;
+						txtPageNum.val(lastPage);
+
+						self.getData(self._reTblEl(el));
+					}
+				})
 
 				var ancRefresh = $(document.createElement("BUTTON")).html("Refresh")
 				ancRefresh.click(function(){
 
-					self._cfgPager({page:parseInt(txtPageNum.val())});
+					var lastPage = calcNumberOfPages(self.options.pager.count, self.options.pager.rows);
+					var expectedPageNo = txtPageNum.val();
+
+					var pageNo = 1;
+					if(!isNaN(expectedPageNo))
+						pageNo = parseInt(expectedPageNo);
+
+					if(pageNo>lastPage)
+						pageNo = lastPage;
+
+					if(expectedPageNo != pageNo)
+						txtPageNum.val(pageNo);
+
+					self._cfgPager({page:pageNo});
 
 					self.getData(self._reTblEl(el));
 				})
 
-				var sep = "&nbsp;|&nbsp;";
+				var SEP = "&nbsp;|&nbsp;";
+
+				var spanPages = $(document.createElement("SPAN"));
+				spanPages.addClass("num-of-pages")
 
 				return this.addToolbar([
 
-					cboPager,sep,
+					cboPager, SEP,
 					ancFirst,
 					ancPrev,
-					" Page ",txtPageNum, " of ",
+					" Page ", txtPageNum, " of ", spanPages, "&nbsp;",
 					ancNext,
-					ancLast,sep,
+					ancLast, SEP,
 					ancRefresh
 				]);
 			},
@@ -493,10 +537,16 @@
 
 			        	self.options.data = response.rows;
 
+			        	self._cfgPager({count:response.count});
+
 			        	if(self.options.__initGrid)
 			        		createHeader(el, self.options);
 
 			        	createBody(el, self.options);
+
+			        	var numOfPages = calcNumberOfPages(self.options.pager.count, self.options.pager.rows);
+
+			        	el.parent().parent().find(".num-of-pages").html(numOfPages);
 
 			        	self.enableAddOns(el);
 			        })
