@@ -1,6 +1,6 @@
 Simplr Grid
 ===========
-![simplrGrid][https://github.com/samweru/simplr-grid/tree/master/img/simplrGrid-min.png]
+![simplrGrid](https://github.com/samweru/simplr-grid/tree/master/img/simplrGrid-min.png)
 
 ## Usage
 
