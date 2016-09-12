@@ -1,3 +1,11 @@
+/*
+ * jQuery simplrGrid - v1.0.0-alpha1
+ * Javascript DataGrid
+ *
+ * Copyright (c) 2016 Samuel Weru
+ * Released under the MIT license
+ */
+
 (function($){
 
 	$.fn.resizeHeader = function(){
