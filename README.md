@@ -1,5 +1,6 @@
 Simplr Grid
 ===========
+![simplrGrid][https://github.com/samweru/simplr-grid/tree/master/img/simplrGrid-min.png]
 
 ## Usage
 
@@ -57,9 +58,5 @@ $("#data-grid").simplrGrid({
 Thanks a lot to the developer(s) of the plugin(s) below: 
 
 [TableHeadFixer](https://github.com/lai32290/TableHeadFixer)
-
-## LICENSE
-
-[MIT](https://opensource.org/licenses/MIT)
 
 Have fun!
