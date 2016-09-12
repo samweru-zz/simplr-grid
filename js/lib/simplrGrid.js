@@ -5,7 +5,6 @@
  * Copyright (c) 2016 Samuel Weru
  * Released under the MIT license
  */
-
 (function($){
 
 	$.fn.resizeHeader = function(){
