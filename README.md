@@ -9,14 +9,11 @@ Simplr Grid
 $("#data-grid").simplrGrid({
 
     url:"/server/fetch.all.php",
-    // method:"POST",
+    method:"POST",
     title:"Sample Grid",
     usePager:true,
     // data:jsonData, //use when inserting data directly
     singleSelect:true,
-    // freezeHeader:false,
-    // freezeLeftColumn:false,
-    // resizeColumns:false,
     columnHide:[
 
         // "id"
@@ -40,7 +37,10 @@ $("#data-grid").simplrGrid({
 
         console.log(row);
     }
-});
+})
+.fixLeftColumn()
+.fixHeader()
+.resizeColumns();
 ```
 
 ## Plugins
