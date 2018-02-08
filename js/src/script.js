@@ -16,7 +16,7 @@
 		method:"POST",
 		title:"Sample Grid",
 		usePager:true,
-		// data:jsonData,
+		data:[],
 		singleSelect:true,
 		// freezeHeader:false,
 		// freezeLeftColumn:false,

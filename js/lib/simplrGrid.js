@@ -243,20 +243,27 @@
 			IdCellTh = $(document.createElement("TH"));
 			theadTr.append(IdCellTh);
 
-			var headerList = Object.keys(options.data[0]);
-			$.each(headerList, function(l,m){
+			if(options.data != undefined){
 
-				var th = $(document.createElement("TH"));
-				th.append(m[0].toUpperCase() + m.substring(1));
+				if(options.data.length > 0){
 
-				if(options.resizeColumns)
-					th.append($("<span>&nbsp;</span>"))
+					var headerList = Object.keys(options.data[0]);
+					
+					$.each(headerList, function(l,m){
 
-				if($.inArray(m, options.columnHide)!=-1)
-					th.hide();
+						var th = $(document.createElement("TH"));
+						th.append(m[0].toUpperCase() + m.substring(1));
 
-				theadTr.append(th);
-			});
+						if(options.resizeColumns)
+							th.append($("<span>&nbsp;</span>"))
+
+						if($.inArray(m, options.columnHide)!=-1)
+							th.hide();
+
+						theadTr.append(th);
+					});
+				}
+			}
 		}
 
 		function createBody(tblEl, options){
