@@ -47,11 +47,11 @@ $("#data-grid").simplrGrid({
 
 `simplrGrid` - is a plugin by itself but also includes other plugins that are already used in grid functionality. If you so wish to use them individually on other elements, you may do so but with some adjustment to your code.
 
-1. `resizeHeader` - place empty `span` in `th`  to act as resize handler
-2. `getSelected` - gets single or first `tr.selected` (returns json)
-3. `getAllSelected` - gets multiple `tr.selected` (returns json list)
-4. `fixHeader` - ready to use
-5. `fixLeftColumn` - ready to use
+1. `resizeColumns` - use header to resize columns
+2. `fixHeader` - fix header row
+3. `fixLeftColumn` - fix left most column
+4. `getSelected` - gets single or first `tr.selected` (returns json)
+5. `getAllSelected` - gets multiple `tr.selected` (returns json list)
 
 ## Contributions
 
