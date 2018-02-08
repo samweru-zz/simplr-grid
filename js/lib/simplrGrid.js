@@ -7,13 +7,15 @@
  */
 (function($){
 
-	$.fn.resizeHeader = function(){
+	$.fn.resizeColumns = function(){
 
 	    return this.each(function(){
 
 	    	var pressed = false;
 		    var start = undefined;
 		    var startX, startWidth;
+
+		    $(this).find("th:not(:first-child)").append("<span>&nbsp;</span>")
 
 	    	$(this).find("th span").mousedown(function(e){
 
@@ -221,9 +223,6 @@
         	data:[],
         	method:"POST",
         	singleSelect:true,
-        	resizeColumns:true,
-        	freezeLeftColumn:true,
-        	freezeHeader:true,
         	usePager:false,
         };
 
@@ -253,9 +252,6 @@
 
 						var th = $(document.createElement("TH"));
 						th.append(m[0].toUpperCase() + m.substring(1));
-
-						if(options.resizeColumns)
-							th.append($("<span>&nbsp;</span>"))
 
 						if($.inArray(m, options.columnHide)!=-1)
 							th.hide();
@@ -566,37 +562,19 @@
 			        	var numOfPages = self._calcPages();
 
 			        	el.parent().parent().find(".num-of-pages").html(numOfPages);
-
-			        	self.enableAddOns(el);
 			        })
 			        .fail(function(){
 
 			        	console.log("Ajax Error!");
 			        })
 			    }
-			    else if(!!this.options.data){
+			    else{
 			    	
 		        	if(this.options.__initGrid)
 		        		createHeader(el, this.options);
 
 		        	createBody(el, this.options);
 			    }
-			},
-			enableAddOns:function(el){
-
-				if(this.options.__initGrid){
-
-					if(this.options.freezeLeftColumn)
-						el.fixLeftColumn();
-
-					if(this.options.freezeHeader)
-						el.fixHeader();
-
-					if(this.options.resizeColumns)
-						el.resizeHeader();
-				}
-				else
-					el.fixLeftColumn();
 			}
 		}
  
