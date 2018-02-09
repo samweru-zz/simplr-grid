@@ -50,8 +50,7 @@ $("#data-grid").simplrGrid({
 1. `resizeColumns` - use header to resize columns
 2. `fixHeader` - fix header row
 3. `fixLeftColumn` - fix left most column
-4. `getSelected` - gets single or first `tr.selected` (returns json)
-5. `getAllSelected` - gets multiple `tr.selected` (returns json list)
+4. `getSelected` and `getAllSelected` - get selected row(s) example: `$('#data-grid').getSelected()`
 
 ## Contributions
 
