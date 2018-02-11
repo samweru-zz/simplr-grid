@@ -14,8 +14,8 @@
 			// singleSelect:false,
 			css:{
 
-				width:500,
-				height:250
+				// width:500,
+				// height:250
 			},
 			columnHide:[
 
@@ -39,6 +39,19 @@
 
 	// $("#data-grid").simplrGrid({
 
+	// 	// ajaxSetup:function(url, method, data, done, fail){
+
+	// 	// 	console.log(data);
+			
+	// 	// 	$.ajax({
+
+	// 	// 		url: url,
+	// 	// 		method: method,
+	// 	// 		data:data
+	// 	// 	})
+	// 	// 	.done(done)
+	// 	// 	.fail(fail)
+	// 	// },
 	// 	url:"/server/fetch.all.php",
 	// 	method:"POST",
 	// 	title:"Sample Grid",

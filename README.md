@@ -5,7 +5,6 @@ Simplr Grid
 ## Usage
 
 ```js
-
 $("#data-grid").simplrGrid({
 
     url:"/server/fetch.all.php",
@@ -36,7 +35,7 @@ $("#data-grid").simplrGrid({
     onDblClick:function(row){//row double click event
 
         console.log(row);
-    }
+    },
 })
 .fixLeftColumn()
 .fixHeader()
@@ -51,6 +50,24 @@ $("#data-grid").simplrGrid({
 2. `fixHeader` - fix header row
 3. `fixLeftColumn` - fix left most column
 4. `getSelected` and `getAllSelected` - get selected row(s) example: `$('#data-grid').getSelected()`
+
+## Custom Ajax Setup
+
+In case you want to use your own ajax function you can add the `ajaxSetup` an option on `simplrGrid`
+
+```js
+ajaxSetup:function(url, method, data, done, fail){
+            
+    $.ajax({
+
+         url: url,
+         method: method,
+         data:data
+    })
+    .done(done)
+    .fail(fail)
+}
+```
 
 ## Contributions
 
