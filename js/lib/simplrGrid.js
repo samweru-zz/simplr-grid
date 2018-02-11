@@ -538,6 +538,9 @@
 
 				var ajaxDone = function(response){
 
+					if(!!self.options.ajaxSetup.responder)
+						response = self.options.ajaxSetup.responder(response);
+
 		        	self.options.data = response.rows;
 
 		        	self._cfgPager({count:response.count});
@@ -559,7 +562,7 @@
 
 				if(!!this.options.ajaxSetup){
 
-					this.options.ajaxSetup(
+					this.options.ajaxSetup.exec(
 						this.options.url,
 						this.options.method,{
 

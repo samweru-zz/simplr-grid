@@ -56,16 +56,26 @@ $("#data-grid").simplrGrid({
 In case you want to use your own ajax function you can add the `ajaxSetup` an option on `simplrGrid` this is useful when you want to mock
 
 ```js
-ajaxSetup:function(url, method, data, done, fail){
-            
-    $.ajax({
+ajaxSetup:{
 
-         url: url,
-         method: method,
-         data:data
-    })
-    .done(done)
-    .fail(fail)
+    exec:function(url, method, data, done, fail){
+
+        $.ajax({
+
+            url: url,
+            method: method,
+            data:data
+        })
+        .done(done)
+        .fail(fail)
+    },
+    // responder:function(response){
+    //
+    //    return response;
+    // }
+    // above function in incase you need to resolve your response
+    // for example: angularjs response data is via response.data
+    // while jQuery's is plain response. It is optional of course.
 }
 ```
 
