@@ -53,7 +53,7 @@ $("#data-grid").simplrGrid({
 
 ## Custom Ajax Setup
 
-In case you want to use your own ajax function you can add the `ajaxSetup` an option on `simplrGrid`
+In case you want to use your own ajax function you can add the `ajaxSetup` an option on `simplrGrid` this is useful when you want to mock
 
 ```js
 ajaxSetup:function(url, method, data, done, fail){
