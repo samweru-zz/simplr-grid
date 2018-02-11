@@ -39,19 +39,26 @@
 
 	// $("#data-grid").simplrGrid({
 
-	// 	// ajaxSetup:function(url, method, data, done, fail){
+	// 	ajaxSetup:{
 
-	// 	// 	console.log(data);
-			
-	// 	// 	$.ajax({
+	// 		exec:function(url, method, data, done, fail){
 
-	// 	// 		url: url,
-	// 	// 		method: method,
-	// 	// 		data:data
-	// 	// 	})
-	// 	// 	.done(done)
-	// 	// 	.fail(fail)
-	// 	// },
+	// 			console.log(data);
+				
+	// 			$.ajax({
+
+	// 				url: url,
+	// 				method: method,
+	// 				data:data
+	// 			})
+	// 			.done(done)
+	// 			.fail(fail)
+	// 		},
+	// 		responder:function(response){
+
+	// 			return response;
+	// 		}
+	// 	},
 	// 	url:"/server/fetch.all.php",
 	// 	method:"POST",
 	// 	title:"Sample Grid",
