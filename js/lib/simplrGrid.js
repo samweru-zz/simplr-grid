@@ -1,5 +1,5 @@
 /*
- * jQuery simplrGrid - v1.0.0-alpha1
+ * jQuery simplrGrid - v1.0.0
  * Javascript DataGrid
  *
  * Copyright (c) 2016 Samuel Weru
@@ -536,45 +536,64 @@
 
 				var self = this;
 
-				if(!!this.options.url){
+				var ajaxDone = function(response){
 
-			        $.ajax({
+		        	self.options.data = response.rows;
 
-			        	url:this.options.url,
-			        	method:this.options.method,
-			        	data:{
+		        	self._cfgPager({count:response.count});
+
+		        	if(self.options.__initGrid)
+		        		createHeader(el, self.options);
+
+		        	createBody(el, self.options);
+
+		        	var numOfPages = self._calcPages();
+
+		        	el.parent().parent().find(".num-of-pages").html(numOfPages);
+		        }
+
+		        var ajaxFail = function(){
+
+		        	console.error("Ajax Error!");
+		        }
+
+				if(!!this.options.ajaxSetup){
+
+					this.options.ajaxSetup(
+						this.options.url,
+						this.options.method,{
 
 			        		page:this.options.pager.page,
 			        		rows:this.options.pager.rows
-			        	}
-			        })
-			        .done(function(response){
+			        	},
+			        	ajaxDone,
+			        	ajaxFail);
+				}
+				else{
 
-			        	self.options.data = response.rows;
+					if(!!this.options.url){
 
-			        	self._cfgPager({count:response.count});
+				        $.ajax({
 
-			        	if(self.options.__initGrid)
-			        		createHeader(el, self.options);
+				        	url:this.options.url,
+				        	method:this.options.method,
+				        	data:{
 
-			        	createBody(el, self.options);
+				        		page:this.options.pager.page,
+				        		rows:this.options.pager.rows
+				        	}
+				        })
+				        .done(ajaxDone)
+				        .fail(ajaxFail)
+				    }
+				    else{
+				    	
+			        	if(this.options.__initGrid)
+			        		createHeader(el, this.options);
 
-			        	var numOfPages = self._calcPages();
-
-			        	el.parent().parent().find(".num-of-pages").html(numOfPages);
-			        })
-			        .fail(function(){
-
-			        	console.log("Ajax Error!");
-			        })
-			    }
-			    else{
-			    	
-		        	if(this.options.__initGrid)
-		        		createHeader(el, this.options);
-
-		        	createBody(el, this.options);
-			    }
+			        	createBody(el, this.options);
+				    }
+				}
 			}
 		}
  
