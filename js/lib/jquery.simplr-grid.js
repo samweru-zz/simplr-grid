@@ -267,12 +267,9 @@
 				// gridHeight:"100%"
 				// capsuleWidth:"100%"
 			},
-        	// css:{},
         	// data:[],
         	method:"POST",
         	singleSelect:true,
-        	width:null,
-        	height:null,
         	dblClick:null,
         	load:null
         	// usePager:false,
@@ -295,39 +292,47 @@
 
 	$.fn.getSelectedRow = function(){
 
-		var cells = $(this).find("tr.selected:first td");
+		var data = {}
 
-		var cellData = {};
+        $.each($(this).find("tr.selected:first td"), function(idx, el){
 
-		$.each(cells,function(k,l){
+            var key = $(el).attr("name")
 
-			var field = $(l).attr("field")
-			if(!!field)
-				cellData[field] = $(l).find("div").html();
-		})
+            if($(this).has("div").length)
+                val = $(this).find("div").html()
+            else
+                val = $(this).html()
 
-		return cellData;
+            data[key] = val;
+        })
+
+        return data;
 	}
 
 	$.fn.getSelectedRows = function(){
 
-		var rowData = [];
+		var rows = [];
 
-		$.each($(this).find("tr.selected"),function(i,j){
+		$.each($(this).find("tr.selected"),function(idxRow, row){
 
-			var cellData = {};
+			var data = {};
 
-			$.each($(j).find("td"),function(k,l){
+			$.each($(row).find("td"),function(idxCell, el){
 
-				var field = $(l).attr("field")
-				if(!!field)
-					cellData[field] = $(l).find("div").html();
+				var key = $(el).attr("name")
+
+	            if($(this).has("div").length)
+	                val = $(this).find("div").html()
+	            else
+	                val = $(this).html()
+
+	            data[key] = val;
 			})
 
-			rowData.push(cellData);
+			rows.push(data);
 		});
 
-		return rowData;
+		return rows;
 	}
 
 

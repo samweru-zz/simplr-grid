@@ -25,21 +25,7 @@ $("#employee-tbl").simplrGrid({
     },
     dblClick:function(){
 
-        /*var data = {}
-
-        $.each($(this).find("td"), function(idx, el){
-
-            var key = $(el).attr("name")
-
-            if($(this).has("div").length)
-                val = $(this).find("div").html()
-            else
-                val = $(this).html()
-
-            data[key] = val;
-        })
-
-        console.log(data);*/
+        console.log($(this).parent().parent().getSelectedRow());
     }
 })
 ```
@@ -51,7 +37,7 @@ $("#employee-tbl").simplrGrid({
 1. `resizeColumns` - use header to resize columns
 2. `fixHeader` - freeze header row
 3. `fixLeftColumn` - freeze left most column
-4. `getSelectedRow` and `getAllSelectedRows` - uses class `.selected`
+4. `getSelectedRow` & `getSelectedRows` - uses class `.selected` to get row(s)
 
 ## Custom Ajax Setup
 
@@ -79,9 +65,9 @@ load:function(table, options, builder){
         builder(table, response, options);
 
         table
-            // .resizeColumns()
+            .resizeColumns()
             .fixHeader()
-            // .fixLeftColumn()
+            .fixLeftColumn()
     })
 }
 ```

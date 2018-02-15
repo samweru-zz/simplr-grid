@@ -27,7 +27,8 @@
 		title:"Employees",
 		url:"/data/employees",
 		method:"GET",
-		singleSelect:true,
+		singleSelect:false,
+		// columnHide:[],
 		css:{
 
 			gridWidth:"99%",
@@ -42,22 +43,8 @@
 		},
 		dblClick:function(){
 
-			var data = {}
-
-			$.each($(this).find("td"), function(idx, el){
-
-				var key = $(el).attr("name")
-
-				if($(this).has("div").length)
-					val = $(this).find("div").html()
-				else
-					val = $(this).html()
-
-				data[key] = val;
-			})
-
-			console.log(data);
-		}//,
+			console.log($(this).parent().parent().getSelectedRow());
+		},
 		// load:function(table, options, builder){
 
 		// 	$.ajax({
