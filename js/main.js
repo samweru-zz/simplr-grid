@@ -2,7 +2,7 @@
 
 	$.ajax.fake.registerWebservice('/data/employees', function(data) {
 
-	    var start_from = (data.page - 1) * data.rows;
+	    var start_from = ((data.page - 1) * data.rows)+1;
 
 	    var _employees = employees().start(start_from).limit(data.rows).get();
 
@@ -28,7 +28,7 @@
 		url:"/data/employees",
 		method:"GET",
 		singleSelect:false,
-		// columnHide:[],
+		columnHide:["id"],
 		css:{
 
 			gridWidth:"99%",

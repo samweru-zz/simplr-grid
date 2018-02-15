@@ -2,9 +2,12 @@
 
 	var grid = {
 
-		addRow:function(rowData, options){
+		addRow:function(idx, rowData, options){
 
 			var row = $(document.createElement("TR"));
+			var cell = $(document.createElement("TD"));
+
+			row.append(cell.html(idx))
 
 			if(options.dblClick)
 				row.dblclick(options.dblClick)
@@ -18,13 +21,9 @@
 			})
 
 			$.each(rowData, function(key, val){
+				
+				cell = cell.clone().attr("name", key).html($(document.createElement("DIV")).html(val))
 
-				if(key.trim()!="id"){
-
-					val = $(document.createElement("DIV")).html(val)
-				}
-
-				var cell = $(document.createElement("TD")).attr("name", key).html(val)
 				row.append(cell)
 			})
 
@@ -33,26 +32,40 @@
 
 		buildBody:function(table, data, options){
 
+			var pageNo = parseInt(options.pager.page);
+			var pageSize = parseInt(options.pager.rows);
+			var startFrom = ((pageNo - 1) * pageSize)+1;
+
 			var tbody = $(document.createElement("TBODY"));
 
 			for(idx in data)
-				tbody.append(this.addRow(data[idx], options));
+				tbody.append(this.addRow(startFrom++, data[idx], options));
 
 			table.append(tbody);
+
+			for(idx in options.columnHide) 
+				table.find("tr td[name="+options.columnHide[idx]+"]").hide()
 		},
 
-		buildHeader:function(table, rows){
+		buildHeader:function(table, rows, options){
 
 			var thead = $(document.createElement("THEAD"));
+			var th = $(document.createElement("TH"));
+
+			thead.append(th.html("&nbsp;"));
 
 			$.each(rows[0], function(key, val){
 
-				var th = $(document.createElement("TH")).html(key[0].toUpperCase() + key.substring(1))
-				th.css("text-align", "left")
-				thead.append(th)
+				thead.append(th.clone()
+								.attr("name", key)
+								.html(key[0].toUpperCase() + key.substring(1))
+								.css("text-align", "left"))
 			})
 
 			table.append(thead);
+
+			for(idx in options.columnHide) 
+				table.find("thead th[name="+options.columnHide[idx]+"]").hide()
 		},
 
 		buildMainToolBar:function(table, options){
@@ -205,7 +218,7 @@
 
 		build:function(table, data, options){
 
-			grid.buildHeader(table, data.rows);
+			grid.buildHeader(table, data.rows, options);
 			grid.buildMainToolBar(table, options);
 			grid.buildBody(table, data.rows, options)
 		},
@@ -214,9 +227,13 @@
 
 			table.find("tbody").remove();
 
-			grid.buildBody(table, data.rows, options);
+			setTimeout(function(){
 
-			table.parent().parent().find(".num-of-pages").html(options.pager.pages);
+				grid.buildBody(table, data.rows, options);
+
+				table.parent().parent().find(".num-of-pages").html(options.pager.pages);
+
+			}, 100)
 		},
 
 		load:function(table, options, builder){
@@ -253,7 +270,7 @@
 		var defaults = {
 
 			title:"Simplr Grid",
-			// columnHide:[],
+			columnHide:[],
     		// toolbars:[],
     		pager:{
 
@@ -277,8 +294,6 @@
 
         options = $.extend({}, defaults, options);
 
-        // console.log(options)
-
 		return this.each(function(){
 
 			var el = $(this);
@@ -294,7 +309,7 @@
 
 		var data = {}
 
-        $.each($(this).find("tr.selected:first td"), function(idx, el){
+        $.each($(this).find("tr.selected:first td:not(:first-child)"), function(idx, el){
 
             var key = $(el).attr("name")
 
@@ -317,7 +332,7 @@
 
 			var data = {};
 
-			$.each($(row).find("td"),function(idxCell, el){
+			$.each($(row).find("td:not(:first-child)"),function(idxCell, el){
 
 				var key = $(el).attr("name")
 
