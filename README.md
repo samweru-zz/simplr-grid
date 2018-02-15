@@ -78,4 +78,11 @@ Thanks a lot to the developer(s) of the plugin(s) below:
 
 [TableHeadFixer](https://github.com/lai32290/TableHeadFixer)
 
+### Other interesting things..
+
+..that I used in this project.
+
+[Fake Ajax](https://github.com/anasnakawa/jquery.ajax.fake) - Fake a web service
+[Taffy DB](https://github.com/typicaljoe/taffydb) - Browser in-memory database
+
 Have fun!

@@ -22,7 +22,9 @@
 
 			$.each(rowData, function(key, val){
 				
-				cell = cell.clone().attr("name", key).html($(document.createElement("DIV")).html(val))
+				cell = cell.clone()
+						.attr("name", key)
+						.html($(document.createElement("DIV")).html(val))
 
 				row.append(cell)
 			})
