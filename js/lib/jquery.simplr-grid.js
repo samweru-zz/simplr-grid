@@ -1,3 +1,10 @@
+/*
+ * jQuery simplrGrid - v1.2.0
+ * Javascript DataGrid
+ *
+ * Copyright (c) 2018 Samuel Weru
+ * Released under the MIT license
+ */
 (function($){
 
 	var grid = {
@@ -290,7 +297,6 @@
 			    dataType:'json',
 			    // fake: true,	// <<<---- that's it !
 			    url:options.url,
-			    toolbars:[],
 			    data:{
 
 			    	page:options.pager.page,
