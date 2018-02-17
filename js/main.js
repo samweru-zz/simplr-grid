@@ -62,33 +62,33 @@
 
 			console.log($(this).parent().parent().getSelectedRow());
 		},
-		// load:function(table, options, builder){
+		customLoader:function(table, options, builder){
 
-		// 	$.ajax({
+			$.ajax({
 
-		// 	    type:options.method,
-		// 	    dataType:'json',
-		// 	    fake: true,	// <<<---- that's it !
-		// 	    url:options.url,
-		// 	    data:{
+			    type:options.method,
+			    dataType:'json',
+			    fake: true,	// <<<---- that's it !
+			    url:options.url,
+			    data:{
 
-		// 	    	page:options.pager.page,
-		// 	    	rows:options.pager.rows
-		// 	    }
-		// 	})
-		// 	.done(function(response){
+			    	page:options.pager.page,
+			    	rows:options.pager.rows
+			    }
+			})
+			.done(function(response){
 
-		// 		//total-number-of-rows/rows-per-page
-		// 		options.pager.pages = Math.ceil(response.count/options.pager.rows);
+				//total-number-of-rows/rows-per-page
+				options.pager.pages = Math.ceil(response.count/options.pager.rows);
 
-		// 		builder(table, response, options);
+				builder(table, response, options);
 
-		// 		table
-		// 			// .resizeColumns()
-		// 			.fixHeader()
-		// 			// .fixLeftColumn()
-		// 	})
-		// }
+				table
+					// .resizeColumns()
+					.fixHeader()
+					// .fixLeftColumn()
+			})
+		}
 	})
 
 })();

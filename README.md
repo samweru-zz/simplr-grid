@@ -58,10 +58,10 @@ $("#employee-tbl").simplrGrid({
 
 ## Custom Ajax Setup
 
-In case you want to use your own ajax function you can add `load` as an option on `simplr-grid` this is useful when you want to mock
+In case you want to use your own ajax function you can add `customLoader` as an option on `simplr-grid` this is useful when you want to mock
 
 ```js
-load:function(table, options, builder){
+customLoader:function(table, options, builder){
 
     $.ajax({
 

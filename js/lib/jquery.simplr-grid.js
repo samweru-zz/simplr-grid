@@ -13,11 +13,18 @@
 				row.dblclick(options.dblClick)
 
 			row.click(function(){
+ 
+				if(options.singleSelect){
 
-				if(options.singleSelect)
-					$(this).siblings().removeClass("selected");
+					$(this).addClass("selected").siblings().removeClass("selected");	
+				}
+				else{
 
-				$(this).addClass("selected")
+					if($(this).hasClass("selected"))
+						$(this).removeClass("selected")
+					else
+						$(this).addClass("selected")
+				}
 			})
 
 			$.each(rowData, function(key, val){
@@ -83,7 +90,7 @@
 			return customToolBar;
 		},
 
-		buildMainToolBars:function(table, options){
+		buildToolbars:function(table, options){
 
 			var gridCapsule = $(document.createElement("DIV"));
 			gridCapsule.addClass("simplr-grid-capsule")
@@ -133,7 +140,7 @@
 
 				// spanPages.html(options.pager.pages);	
 
-				grid.load(table, options, grid.rebuildBody);
+				grid.loader(table, options, grid.rebuildBody);
 			});
 
 			var btnFirst = $(document.createElement("BUTTON")).html("|<")
@@ -145,7 +152,7 @@
 
 					txtPageNum.val(options.pager.page);
 
-					grid.load(table, options, grid.rebuildBody);
+					grid.loader(table, options, grid.rebuildBody);
 				}
 			})
 
@@ -158,7 +165,7 @@
 
 					txtPageNum.val(options.pager.page);
 
-					grid.load(table, options, grid.rebuildBody);
+					grid.loader(table, options, grid.rebuildBody);
 				}
 			})
 
@@ -171,7 +178,7 @@
 
 					txtPageNum.val(options.pager.page);
 
-					grid.load(table, options, grid.rebuildBody);
+					grid.loader(table, options, grid.rebuildBody);
 				}
 			})
 
@@ -179,12 +186,12 @@
 			btnLast.click(function(){
 
 				if(options.pager.page!=options.pager.pages){
-					
+
 					options.pager.page = options.pager.pages;
 
 					txtPageNum.val(options.pager.page);
 
-					grid.load(table, options, grid.rebuildBody);
+					grid.loader(table, options, grid.rebuildBody);
 				}
 			})
 
@@ -193,7 +200,7 @@
 
 				options.pager.page = table.parent().parent().find(".page-num").val()
 
-				grid.load(table, options, grid.rebuildBody);
+				grid.loader(table, options, grid.rebuildBody);
 			})
 
 			var SEP = "&nbsp;|&nbsp;";
@@ -234,7 +241,7 @@
 		build:function(table, data, options){
 
 			grid.buildHeader(table, data.rows, options);
-			grid.buildMainToolBars(table, options);
+			grid.buildToolbars(table, options);
 			grid.buildBody(table, data.rows, options)
 		},
 
@@ -251,13 +258,13 @@
 			}, 100)
 		},
 
-		load:function(table, options, builder){
+		nativeLoader:function(table, options, builder){
 
 			$.ajax({
 
 			    type:options.method,
 			    dataType:'json',
-			    fake: true,	// <<<---- that's it !
+			    //fake: true,	// <<<---- that's it !
 			    url:options.url,
 			    toolbars:[],
 			    data:{
@@ -278,6 +285,15 @@
 					.fixHeader()
 					.fixLeftColumn()
 			})
+		},
+		loader:function(table, options, builder){
+
+			table.addClass("simplr-grid")
+
+			if(options.customLoader)
+				options.customLoader(table, options, builder)
+			else
+				grid.nativeLoader(table, options, builder);
 		}
 	}
 
@@ -304,7 +320,7 @@
         	method:"POST",
         	singleSelect:true,
         	dblClick:null,
-        	load:null
+        	customLoader:null
         	// usePager:false,
         };
 
@@ -312,12 +328,7 @@
 
 		return this.each(function(){
 
-			var el = $(this);
-
-			if(options.load)
-				options.load(el.addClass("simplr-grid"), options, grid.build)
-			else
-				grid.load(el.addClass("simplr-grid"), options, grid.build);
+			grid.loader($(this), options, grid.build)
 		})
 	}
 
