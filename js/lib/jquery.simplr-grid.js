@@ -31,7 +31,11 @@
 				
 				cell = cell.clone()
 						.attr("name", key)
-						.html($(document.createElement("DIV")).html(val))
+
+				if(options.resizeColumns)
+					cell.html($(document.createElement("DIV")).html(val))
+				else
+					cell.html(val)
 
 				row.append(cell)
 			})
@@ -90,33 +94,7 @@
 			return customToolBar;
 		},
 
-		buildToolbars:function(table, options){
-
-			var gridCapsule = $(document.createElement("DIV"));
-			gridCapsule.addClass("simplr-grid-capsule")
-
-			gridCapsule.css({
-
-				width:options.css.capsuleWidth
-			})
-
-			table.css({
-
-				width:options.css.gridWidth,
-			})
-
-			table.replaceWith(gridCapsule)
-
-			var gridTitle = $(document.createElement("DIV"));
-			gridTitle.addClass("simplr-grid-title")
-			gridTitle.html("&nbsp;".concat(options.title))
-
-			var gridInner = $(document.createElement("DIV"));
-			gridInner.addClass("simplr-grid-inner")
-			gridInner.css({
-
-				height:options.css.gridHeight
-			})
+		buildPager:function(table, options){
 
 			var txtPageNum = $(document.createElement("INPUT"));
 			txtPageNum.val(options.pager.page);
@@ -137,8 +115,6 @@
 				options.pager.rows = $(this).val();
 
 				txtPageNum.val(options.pager.page);
-
-				// spanPages.html(options.pager.pages);	
 
 				grid.loader(table, options, grid.rebuildBody);
 			});
@@ -209,14 +185,7 @@
 			spanPages.addClass("num-of-pages")
 			spanPages.html(options.pager.pages);
 
-			gridCapsule.append(gridTitle)
-
-			$.each(options.toolbars, function(idx, toolbar){
-
-				gridCapsule.append(grid.addToolbar(toolbar));
-			})
-
-			gridCapsule.append(this.addToolbar([
+			return this.addToolbar([
 
 				cboPager,
 				SEP,
@@ -231,7 +200,46 @@
 				btnLast,
 				SEP,
 				btnRefresh,
-			]))
+			])
+		},
+
+		buildToolbars:function(table, options){
+
+			var gridCapsule = $(document.createElement("DIV"));
+			gridCapsule.addClass("simplr-grid-capsule")
+
+			gridCapsule.css({
+
+				width:options.css.capsuleWidth
+			})
+
+			table.css({
+
+				width:options.css.gridWidth,
+			})
+
+			table.replaceWith(gridCapsule)
+
+			var gridTitle = $(document.createElement("DIV"));
+			gridTitle.addClass("simplr-grid-title")
+			gridTitle.html("&nbsp;".concat(options.title))
+
+			var gridInner = $(document.createElement("DIV"));
+			gridInner.addClass("simplr-grid-inner")
+			gridInner.css({
+
+				height:options.css.gridHeight
+			})
+
+			gridCapsule.append(gridTitle)
+
+			$.each(options.toolbars, function(idx, toolbar){
+
+				gridCapsule.append(grid.addToolbar(toolbar));
+			})
+
+			if(options.usePager)
+				gridCapsule.append(grid.buildPager(table, options))
 
 			gridCapsule.append(gridInner)
 
@@ -240,9 +248,10 @@
 
 		build:function(table, data, options){
 
-			grid.buildHeader(table, data.rows, options);
 			grid.buildToolbars(table, options);
+			grid.buildHeader(table, data.rows, options);
 			grid.buildBody(table, data.rows, options)
+			grid.doPlugins(table, options)
 		},
 
 		rebuildBody:function(table, data, options){
@@ -257,14 +266,29 @@
 
 			}, 100)
 		},
+		doPlugins:function(table, options){
 
+			if(options.fixHeader)
+				table.fixHeader();
+
+			if(options.fixLeftColumn)
+				table.fixLeftColumn();
+			else
+				table.parent().css({
+
+					overflow:"auto"
+				})
+
+			if(options.resizeColumns)
+				table.resizeColumns();
+		},
 		nativeLoader:function(table, options, builder){
 
 			$.ajax({
 
 			    type:options.method,
 			    dataType:'json',
-			    //fake: true,	// <<<---- that's it !
+			    // fake: true,	// <<<---- that's it !
 			    url:options.url,
 			    toolbars:[],
 			    data:{
@@ -275,25 +299,34 @@
 			})
 			.done(function(response){
 
-				//tota-number-of-rows/rows-per-page
+				//total-number-of-rows/rows-per-page
 				options.pager.pages = Math.ceil(response.count/options.pager.rows);
 
 				builder(table, response, options);
-
-				table
-					.resizeColumns()
-					.fixHeader()
-					.fixLeftColumn()
 			})
 		},
 		loader:function(table, options, builder){
 
 			table.addClass("simplr-grid")
 
-			if(options.customLoader)
-				options.customLoader(table, options, builder)
-			else
-				grid.nativeLoader(table, options, builder);
+			if(options.data.length>0){
+
+				builder(table,{
+
+					rows:options.data,
+					count:options.data.length
+
+				},options);
+
+				grid.doPlugins(table, options);
+			}
+			else{
+
+				if(options.customLoader)
+					options.customLoader(table, options, builder)
+				else
+					grid.nativeLoader(table, options, builder);
+			}
 		}
 	}
 
@@ -316,13 +349,19 @@
 				// gridHeight:"100%"
 				// capsuleWidth:"100%"
 			},
-        	// data:[],
+        	data:[],
         	method:"POST",
         	singleSelect:true,
         	dblClick:null,
-        	customLoader:null
+        	customLoader:null,
+        	usePager:false,
+        	fixHeader:false,
+			fixLeftColumn:false,
+			resizeColumns:false,
         	// usePager:false,
         };
+
+        // console.log(options);
 
         options = $.extend({}, defaults, options);
 
@@ -332,13 +371,13 @@
 		})
 	}
 
-	$.fn.getSelectedRow = function(){
+	$.fn.getRow = function(selector){
 
 		var data = {}
 
-        $.each($(this).find("tr.selected:first td:not(:first-child)"), function(idx, el){
+		$(this).has("td").find("td:not(:first-child)").each(function(idx, el){
 
-            var key = $(el).attr("name")
+			var key = $(el).attr("name")
 
             if($(this).has("div").length)
                 val = $(this).find("div").html()
@@ -346,9 +385,14 @@
                 val = $(this).html()
 
             data[key] = val;
-        })
+		})
 
-        return data;
+		return data;
+	}
+
+	$.fn.getSelectedRow = function(){
+
+        return $(this).find("tr.selected:first").getRow();
 	}
 
 	$.fn.getSelectedRows = function(){
@@ -357,21 +401,7 @@
 
 		$.each($(this).find("tr.selected"),function(idxRow, row){
 
-			var data = {};
-
-			$.each($(row).find("td:not(:first-child)"),function(idxCell, el){
-
-				var key = $(el).attr("name")
-
-	            if($(this).has("div").length)
-	                val = $(this).find("div").html()
-	            else
-	                val = $(this).html()
-
-	            data[key] = val;
-			})
-
-			rows.push(data);
+			rows.push($(row).getRow());
 		});
 
 		return rows;

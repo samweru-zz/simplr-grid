@@ -22,11 +22,16 @@ $("#employee-tbl").simplrGrid({
 
     title:"Employees",
     url:"/data/employees",
-    method:"GET",
+    method:"POST",
     singleSelect:true,
+    usePager:true,
+    fixHeader:true,
+    fixLeftColumn:true,
+    resizeColumns:true,
+    // data:[] //if you want to input data directly. Overrides Ajax
     css:{
 
-        gridWidth:"99%",
+        gridWidth:"110%",
         gridHeight:"400px",
         capsuleWidth:"100%",
     },
@@ -42,7 +47,7 @@ $("#employee-tbl").simplrGrid({
     },
     dblClick:function(){
 
-        console.log($(this).parent().parent().getSelectedRow());
+        console.log($(this).getRow());
     }
 })
 ```
@@ -55,6 +60,7 @@ $("#employee-tbl").simplrGrid({
 2. `fixHeader` - freeze header row
 3. `fixLeftColumn` - freeze left most column
 4. `getSelectedRow` & `getSelectedRows` - uses class `.selected` to get row(s)
+5. `getRow` - gets row data
 
 ## Custom Ajax Setup
 
@@ -80,11 +86,6 @@ customLoader:function(table, options, builder){
         options.pager.pages = Math.ceil(response.count/options.pager.rows);
 
         builder(table, response, options);
-
-        table
-            .resizeColumns()
-            .fixHeader()
-            .fixLeftColumn()
     })
 }
 ```

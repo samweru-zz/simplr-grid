@@ -1,16 +1,23 @@
 (function(){
 
-	$.ajax.fake.registerWebservice('/data/employees', function(data) {
+	function getEmployees(start_from, rows_per_page){
 
-	    var start_from = ((data.page - 1) * data.rows)+1;
-
-	    var _employees = employees().start(start_from).limit(data.rows).get();
+		var _employees = employees().start(start_from).limit(rows_per_page).get();
 
 	    for(idx in _employees){
 
 			delete _employees[idx].___id;
 			delete _employees[idx].___s;
 		}
+
+		return _employees;
+	}
+
+	$.ajax.fake.registerWebservice('/data/employees', function(data) {
+
+	    var start_from = ((data.page - 1) * data.rows)+1;
+
+	    var _employees = getEmployees(start_from, data.rows)
 
 	    return {
 
@@ -20,7 +27,8 @@
 		    	count: employees().count()
 		    }
 	    }
-	});
+
+	}, "POST");
 
 	var button = $(document.createElement("BUTTON"));
 	var customToolbar = [
@@ -39,16 +47,21 @@
 
 		title:"Employees",
 		url:"/data/employees",
-		method:"GET",
+		method:"POST",
 		singleSelect:false,
 		columnHide:["id"],
+		usePager:true,
+		// fixHeader:true,
+		// fixLeftColumn:true,
+		// resizeColumns:true,
+		// data:getEmployees(1,20),
 		toolbars:[
 
-			customToolbar
+			// customToolbar
 		],
 		css:{
 
-			gridWidth:"99%",
+			gridWidth:"110%",
 			gridHeight:"400px",
 			capsuleWidth:"100%",
 		},
@@ -60,7 +73,7 @@
 		},
 		dblClick:function(){
 
-			console.log($(this).parent().parent().getSelectedRow());
+			console.log($(this).getRow());
 		},
 		customLoader:function(table, options, builder){
 
@@ -82,11 +95,6 @@
 				options.pager.pages = Math.ceil(response.count/options.pager.rows);
 
 				builder(table, response, options);
-
-				table
-					// .resizeColumns()
-					.fixHeader()
-					// .fixLeftColumn()
 			})
 		}
 	})
