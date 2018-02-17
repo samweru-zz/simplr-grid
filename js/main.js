@@ -51,19 +51,19 @@
 		singleSelect:false,
 		columnHide:["id"],
 		usePager:true,
-		// fixHeader:true,
-		// fixLeftColumn:true,
-		// resizeColumns:true,
+		fixHeader:true,
+		fixLeftColumn:true,
+		resizeColumns:true,
 		// data:getEmployees(1,20),
 		toolbars:[
 
-			// customToolbar
+			customToolbar
 		],
 		css:{
 
 			gridWidth:"110%",
 			gridHeight:"400px",
-			capsuleWidth:"100%",
+			capsuleWidth:"45%",
 		},
 		pager:{
 
