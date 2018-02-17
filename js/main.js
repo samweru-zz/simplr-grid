@@ -48,6 +48,8 @@
 		title:"Employees",
 		url:"/data/employees",
 		method:"POST",
+		// url:"server/fetch.all.php",
+		// method:"GET",
 		singleSelect:false,
 		columnHide:["id"],
 		usePager:true,
