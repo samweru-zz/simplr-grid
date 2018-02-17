@@ -96,7 +96,7 @@ Thanks a lot to the developer(s) of the plugin(s) below:
 
 [TableHeadFixer](https://github.com/lai32290/TableHeadFixer)
 
-### Other interesting things..
+### Some other goodies..
 
 ..that I used in this project.
 
