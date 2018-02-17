@@ -143,7 +143,7 @@
 				grid.loader(table, options, grid.rebuildBody);
 			});
 
-			var btnFirst = $(document.createElement("BUTTON")).html("|<")
+			var btnFirst = $(document.createElement("BUTTON")).html("&#171;").attr("title", "First")
 			btnFirst.click(function(){
 
 				if(options.pager.page != 1){
@@ -156,7 +156,7 @@
 				}
 			})
 
-			var btnPrev = $(document.createElement("BUTTON")).html("<")
+			var btnPrev = $(document.createElement("BUTTON")).html("&#8249;").attr("title", "Previous")
 			btnPrev.click(function(){
 
 				if(options.pager.page>1){
@@ -169,7 +169,7 @@
 				}
 			})
 
-			var btnNext = $(document.createElement("BUTTON")).html(">")
+			var btnNext = $(document.createElement("BUTTON")).html("&#8250;").attr("title", "Next")
 			btnNext.click(function(){
 
 				if(options.pager.page<options.pager.pages){
@@ -182,7 +182,7 @@
 				}
 			})
 
-			var btnLast = $(document.createElement("BUTTON")).html(">|")
+			var btnLast = $(document.createElement("BUTTON")).html("&#187;").attr("title", "Last")
 			btnLast.click(function(){
 
 				if(options.pager.page!=options.pager.pages){
@@ -195,7 +195,7 @@
 				}
 			})
 
-			var btnRefresh = $(document.createElement("BUTTON")).html("Refresh")
+			var btnRefresh = $(document.createElement("BUTTON")).html("&#8634;").attr("title", "Refresh")
 			btnRefresh.click(function(){
 
 				options.pager.page = table.parent().parent().find(".page-num").val()
