@@ -5,6 +5,19 @@ Simplr Grid
 ## Usage
 
 ```js
+var button = $(document.createElement("BUTTON"));
+var customToolbar = [
+
+    button.clone().html("Add").click(function(){
+
+        console.log("Button Add Clicked.")
+    }),
+    button.clone().html("Sel").click(function(){
+
+        console.log("Button Select Clicked.")
+    })
+];
+
 $("#employee-tbl").simplrGrid({
 
     title:"Employees",
@@ -17,6 +30,10 @@ $("#employee-tbl").simplrGrid({
         gridHeight:"400px",
         capsuleWidth:"100%",
     },
+    toolbars:[
+
+        customToolbar //This represents a single toolbar
+    ],
     pager:{
 
         page:1,

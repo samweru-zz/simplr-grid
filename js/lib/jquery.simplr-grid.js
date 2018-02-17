@@ -70,7 +70,20 @@
 				table.find("thead th[name="+options.columnHide[idx]+"]").hide()
 		},
 
-		buildMainToolBar:function(table, options){
+		addToolbar:function(arrEl){
+
+			var customToolBar = $(document.createElement("DIV"));
+			customToolBar.addClass("simplr-grid-toolbar");
+
+			$.each(arrEl, function(idx, el){
+
+				customToolBar.append(el)
+			})
+
+			return customToolBar;
+		},
+
+		buildMainToolBars:function(table, options){
 
 			var gridCapsule = $(document.createElement("DIV"));
 			gridCapsule.addClass("simplr-grid-capsule")
@@ -90,17 +103,6 @@
 			var gridTitle = $(document.createElement("DIV"));
 			gridTitle.addClass("simplr-grid-title")
 			gridTitle.html("&nbsp;".concat(options.title))
-			gridCapsule.append(gridTitle)
-
-
-			var mainToolBar = $(document.createElement("DIV"));
-			mainToolBar.addClass("simplr-grid-toolbar")
-			gridCapsule.append(mainToolBar)
-
-			var customToolBar = $(document.createElement("DIV"));
-			customToolBar.append("<button>Add</button>")
-			customToolBar.addClass("simplr-grid-toolbar")
-			gridCapsule.append(customToolBar)
 
 			var gridInner = $(document.createElement("DIV"));
 			gridInner.addClass("simplr-grid-inner")
@@ -108,12 +110,6 @@
 
 				height:options.css.gridHeight
 			})
-			
-			gridCapsule.append(gridInner)
-
-			gridInner.append(table)
-
-			// gridCapsule.append(table)
 
 			var txtPageNum = $(document.createElement("INPUT"));
 			txtPageNum.val(options.pager.page);
@@ -143,11 +139,14 @@
 			var btnFirst = $(document.createElement("BUTTON")).html("|<")
 			btnFirst.click(function(){
 
-				options.pager.page = 1;
+				if(options.pager.page != 1){
 
-				txtPageNum.val(options.pager.page);
+					options.pager.page = 1;
 
-				grid.load(table, options, grid.rebuildBody);
+					txtPageNum.val(options.pager.page);
+
+					grid.load(table, options, grid.rebuildBody);
+				}
 			})
 
 			var btnPrev = $(document.createElement("BUTTON")).html("<")
@@ -179,11 +178,14 @@
 			var btnLast = $(document.createElement("BUTTON")).html(">|")
 			btnLast.click(function(){
 
-				options.pager.page = options.pager.pages;
+				if(options.pager.page!=options.pager.pages){
+					
+					options.pager.page = options.pager.pages;
 
-				txtPageNum.val(options.pager.page);
+					txtPageNum.val(options.pager.page);
 
-				grid.load(table, options, grid.rebuildBody);
+					grid.load(table, options, grid.rebuildBody);
+				}
 			})
 
 			var btnRefresh = $(document.createElement("BUTTON")).html("Refresh")
@@ -200,28 +202,39 @@
 			spanPages.addClass("num-of-pages")
 			spanPages.html(options.pager.pages);
 
-			mainToolBar
-				.append(cboPager)
-				.append(SEP)
-				.append(btnFirst)
-				.append(btnPrev)
-				.append("<span> Page </span>")
-				.append(txtPageNum)
-				.append("<span> of </span>")
-				.append(spanPages)
-				.append("<span>&nbsp;</span>")
-				.append(btnNext)
-				.append(btnLast)
-				.append(SEP)
-				.append(btnRefresh)
+			gridCapsule.append(gridTitle)
 
-			
+			$.each(options.toolbars, function(idx, toolbar){
+
+				gridCapsule.append(grid.addToolbar(toolbar));
+			})
+
+			gridCapsule.append(this.addToolbar([
+
+				cboPager,
+				SEP,
+				btnFirst,
+				btnPrev,
+				"<span> Page </span>",
+				txtPageNum,
+				"<span> of </span>",
+				spanPages,
+				"<span>&nbsp;</span>",
+				btnNext,
+				btnLast,
+				SEP,
+				btnRefresh,
+			]))
+
+			gridCapsule.append(gridInner)
+
+			gridInner.append(table)
 		},
 
 		build:function(table, data, options){
 
 			grid.buildHeader(table, data.rows, options);
-			grid.buildMainToolBar(table, options);
+			grid.buildMainToolBars(table, options);
 			grid.buildBody(table, data.rows, options)
 		},
 
@@ -246,6 +259,7 @@
 			    dataType:'json',
 			    fake: true,	// <<<---- that's it !
 			    url:options.url,
+			    toolbars:[],
 			    data:{
 
 			    	page:options.pager.page,
@@ -273,7 +287,7 @@
 
 			title:"Simplr Grid",
 			columnHide:[],
-    		// toolbars:[],
+    		toolbars:[],
     		pager:{
 
     			page:1,

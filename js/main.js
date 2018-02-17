@@ -22,6 +22,19 @@
 	    }
 	});
 
+	var button = $(document.createElement("BUTTON"));
+	var customToolbar = [
+
+	    button.clone().html("Add").click(function(){
+
+	        console.log("Button Add Clicked.")
+	    }),
+	    button.clone().html("Sel").click(function(){
+
+	        console.log("Button Select Clicked.")
+	    })
+	];
+
 	$("#employee-tbl").simplrGrid({
 
 		title:"Employees",
@@ -29,6 +42,10 @@
 		method:"GET",
 		singleSelect:false,
 		columnHide:["id"],
+		toolbars:[
+
+			customToolbar
+		],
 		css:{
 
 			gridWidth:"99%",
