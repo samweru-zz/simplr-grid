@@ -57,6 +57,19 @@
 		fixLeftColumn:true,
 		resizeColumns:true,
 		// data:getEmployees(1,20),
+		header:{
+
+			"id":{name:"#"},
+			"email":{name:"Email"},
+			"county":{name:"County"}, 
+			"mobile":{name:"Mobile"}, 
+			"status":{name:"Status"},
+			"address":{name:"Address"},
+			"married":{name:"Married"},
+			"employed":{name:"Employed"},
+			"lastname":{name:"Last Name"},
+			"firstname":{name:"First Name"}
+		},
 		toolbars:[
 
 			customToolbar
@@ -65,7 +78,8 @@
 
 			gridWidth:"110%",
 			gridHeight:"400px",
-			capsuleWidth:"45%",
+			capsuleWidth:"100%",
+			capsuleHeight:"600px",
 		},
 		pager:{
 

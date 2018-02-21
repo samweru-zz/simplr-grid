@@ -74,12 +74,38 @@
 
 			thead.append(th.html("&nbsp;"));
 
+			var css = {};
+			var name;
+
 			$.each(rows[0], function(key, val){
+
+				if(!$.isEmptyObject(options.header)){
+
+					var cell = options.header[key];
+
+					name = cell.name || key;
+
+					if(typeof cell.css != 'undefined')
+						css = cell.css;
+				}
+				else{
+
+					var parts = key.split("_")
+
+					if(parts.length>1)
+						name = parts.map(function(a){
+
+							return a[0].toUpperCase()+a.substring(1)
+
+						}).join(" ")
+					else
+						name = key[0].toUpperCase() + key.substring(1)
+				}
 
 				thead.append(th.clone()
 								.attr("name", key)
-								.html(key[0].toUpperCase() + key.substring(1))
-								.css("text-align", "left"))
+								.html(name)
+								.css($.extend({textAlign:"left"}, css)))
 			})
 
 			table.append(thead);
@@ -343,6 +369,7 @@
 			title:"Simplr Grid",
 			columnHide:[],
     		toolbars:[],
+    		header:{},
     		pager:{
 
     			page:1,
