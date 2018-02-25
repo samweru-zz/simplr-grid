@@ -70,9 +70,6 @@
 				tbody.append(this.addRow(startFrom++, data[idx], options));
 
 			table.append(tbody);
-
-			for(idx in options.columnHide) 
-				table.find("tr td[name="+options.columnHide[idx]+"]").hide()
 		},
 
 		buildHeader:function(table, rows, options){
@@ -82,18 +79,27 @@
 
 			thead.append(th.html("&nbsp;"));
 
-			var css = {};
-			var name;
-
 			$.each(rows[0], function(key, val){
+
+				var css={};
+				var name = "";
 
 				if(!$.isEmptyObject(options.columns)){
 
-					var cell = options.columns[key];
+					if(options.columns.hasOwnProperty(key)){
 
-					name = cell.name || key;
+						var cell = options.columns[key];
+
+						name = cell.name || key;
+
+						if(cell.hasOwnProperty("css"))
+							if(cell.css.hasOwnProperty("display"))
+								if(cell.css.display.toLowerCase().trim() == "none")
+									css = {display:"none"}
+					}
 				}
-				else{
+
+				if(!name){
 
 					var parts = key.split("_")
 
@@ -107,15 +113,13 @@
 						name = key[0].toUpperCase() + key.substring(1)
 				}
 
-				thead.append(th.clone()
+				thead.append($(document.createElement("TH"))
 								.attr("name", key)
-								.html(name))
+								.html(name)
+								.css(css))
 			})
 
 			table.append(thead);
-
-			for(idx in options.columnHide) 
-				table.find("thead th[name="+options.columnHide[idx]+"]").hide()
 		},
 
 		addToolbar:function(arrEl){
@@ -371,7 +375,6 @@
 		var defaults = {
 
 			title:"Simplr Grid",
-			columnHide:[],
     		toolbars:[],
     		columns:{},
     		pager:{

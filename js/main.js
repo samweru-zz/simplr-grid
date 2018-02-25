@@ -59,8 +59,8 @@
 		// data:getEmployees(1,20),
 		columns:{
 
-			"id":{name:"#"},
-			"email":{name:"Email"},
+			"id":{name:"#", css:{display:"none"}},
+			"email":{name:"Email", css:{textDecoration:"underline"}},
 			"county":{name:"County"}, 
 			"mobile":{name:"Mobile"}, 
 			"status":{name:"Status"},
