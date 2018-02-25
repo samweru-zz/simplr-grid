@@ -40,7 +40,9 @@
 				if(!$.isEmptyObject(options.columns)){
 
 					var column = options.columns[key]
-					css = column.css || css
+
+					if(column.hasOwnProperty("css"))
+						css = column.css || css
 				}
 
 				cell = $(document.createElement("TD"))
