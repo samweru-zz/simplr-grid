@@ -41,8 +41,9 @@
 
 					var column = options.columns[key]
 
-					if(column.hasOwnProperty("css"))
-						css = column.css || css
+					if(typeof(column)!="undefined")
+						if(column.hasOwnProperty("css"))
+							css = column.css || css
 				}
 
 				cell = $(document.createElement("TD"))

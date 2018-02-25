@@ -63,7 +63,7 @@
 			"email":{name:"Email", css:{textDecoration:"underline"}},
 			"county":{name:"County"}, 
 			"mobile":{name:"Mobile"}, 
-			"status":{name:"Status"},
+			// "status":{name:"Status"},
 			"address":{name:"Address"},
 			"married":{name:"Married"},
 			"employed":{name:"Employed", css:{textAlign:"right", paddingRight:"10px"}},
