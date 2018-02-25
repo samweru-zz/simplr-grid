@@ -57,7 +57,7 @@
 		fixLeftColumn:true,
 		resizeColumns:true,
 		// data:getEmployees(1,20),
-		header:{
+		columns:{
 
 			"id":{name:"#"},
 			"email":{name:"Email"},
@@ -66,7 +66,7 @@
 			"status":{name:"Status"},
 			"address":{name:"Address"},
 			"married":{name:"Married"},
-			"employed":{name:"Employed"},
+			"employed":{name:"Employed", css:{textAlign:"right", paddingRight:"10px"}},
 			"lastname":{name:"Last Name"},
 			"firstname":{name:"First Name"}
 		},

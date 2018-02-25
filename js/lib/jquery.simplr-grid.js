@@ -36,8 +36,16 @@
 
 			$.each(rowData, function(key, val){
 				
-				cell = cell.clone()
+				var css = {}
+				if(!$.isEmptyObject(options.columns)){
+
+					var column = options.columns[key]
+					css = column.css || css
+				}
+
+				cell = $(document.createElement("TD"))
 						.attr("name", key)
+						.css(css)
 
 				if(options.resizeColumns)
 					cell.html($(document.createElement("DIV")).html(val))
@@ -79,14 +87,11 @@
 
 			$.each(rows[0], function(key, val){
 
-				if(!$.isEmptyObject(options.header)){
+				if(!$.isEmptyObject(options.columns)){
 
-					var cell = options.header[key];
+					var cell = options.columns[key];
 
 					name = cell.name || key;
-
-					if(typeof cell.css != 'undefined')
-						css = cell.css;
 				}
 				else{
 
@@ -104,8 +109,7 @@
 
 				thead.append(th.clone()
 								.attr("name", key)
-								.html(name)
-								.css($.extend({textAlign:"left"}, css)))
+								.html(name))
 			})
 
 			table.append(thead);
@@ -369,7 +373,7 @@
 			title:"Simplr Grid",
 			columnHide:[],
     		toolbars:[],
-    		header:{},
+    		columns:{},
     		pager:{
 
     			page:1,
@@ -390,11 +394,8 @@
         	usePager:false,
         	fixHeader:false,
 			fixLeftColumn:false,
-			resizeColumns:false,
-        	// usePager:false,
+			resizeColumns:false
         };
-
-        // console.log(options);
 
         options = $.extend({}, defaults, options);
 
