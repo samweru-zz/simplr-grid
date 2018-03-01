@@ -13,20 +13,31 @@
 		return _employees;
 	}
 
+	window.returnData = true
 	$.ajax.fake.registerWebservice('/data/employees', function(data) {
 
 	    var start_from = ((data.page - 1) * data.rows)+1;
 
 	    var _employees = getEmployees(start_from, data.rows)
 
-	    return {
+	    if(window.returnData)
+	    	return {
 
-	    	success:{
+		    	success:{
 
-		    	rows:_employees,
-		    	count: employees().count()
+			    	rows:_employees,
+			    	count: employees().count()
+			    }
+			}
+		else
+		    return {
+
+			    success:{
+
+			    	rows:[],
+			    	count:0
+			    }
 		    }
-	    }
 
 	}, "POST");
 

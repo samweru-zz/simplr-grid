@@ -122,7 +122,13 @@
 								.css(css))
 			})
 
-			table.append(thead);
+			if(rows.length>0){
+
+				table.append(thead);
+
+				return true;
+			}
+			else return false;
 		},
 
 		addToolbar:function(arrEl){
@@ -148,9 +154,7 @@
 			$.each(options.pager.list, function(i,e){
 
 				$(cboPager).append(new Option(e))
-			});
-
-			$(cboPager).val(options.pager.rows);
+			});	
 
 			cboPager.change(function(){
 				
@@ -163,7 +167,10 @@
 				grid.loader(table, options, grid.rebuildBody);
 			});
 
-			var btnFirst = $(document.createElement("BUTTON")).html("&#171;").attr("title", "First")
+			var btnFirst = $(document.createElement("BUTTON"))
+								.addClass("sg-first")
+								.html("&#171;").attr("title", "First")
+
 			btnFirst.click(function(){
 
 				if(options.pager.page != 1){
@@ -176,7 +183,10 @@
 				}
 			})
 
-			var btnPrev = $(document.createElement("BUTTON")).html("&#8249;").attr("title", "Previous")
+			var btnPrev = $(document.createElement("BUTTON"))
+								.addClass("sg-prev")
+								.html("&#8249;").attr("title", "Previous")
+
 			btnPrev.click(function(){
 
 				if(options.pager.page>1){
@@ -189,7 +199,10 @@
 				}
 			})
 
-			var btnNext = $(document.createElement("BUTTON")).html("&#8250;").attr("title", "Next")
+			var btnNext = $(document.createElement("BUTTON"))
+								.addClass("sg-next")
+								.html("&#8250;").attr("title", "Next")
+
 			btnNext.click(function(){
 
 				if(options.pager.page<options.pager.pages){
@@ -202,7 +215,10 @@
 				}
 			})
 
-			var btnLast = $(document.createElement("BUTTON")).html("&#187;").attr("title", "Last")
+			var btnLast = $(document.createElement("BUTTON"))
+								.addClass("sg-last")
+								.html("&#187;").attr("title", "Last")
+
 			btnLast.click(function(){
 
 				if(options.pager.page!=options.pager.pages){
@@ -215,7 +231,10 @@
 				}
 			})
 
-			var btnRefresh = $(document.createElement("BUTTON")).html("&#8634;").attr("title", "Refresh")
+			var btnRefresh = $(document.createElement("BUTTON"))
+								.addClass("sg-refresh")
+								.html("&#8634;").attr("title", "Refresh")
+
 			btnRefresh.click(function(){
 
 				options.pager.page = table.parent().parent().find(".page-num").val()
@@ -290,23 +309,57 @@
 			gridInner.append(table)
 		},
 
+		disableToolbar:function(table, disableTBar){
+
+			var toolbar = table.parent().prev()
+			toolbar.find(".sg-last, .sg-next, .sg-prev, .sg-first, .page-num, select")
+					.attr("disabled", disableTBar)
+
+			if(disableTBar){
+
+				var msgOuter = $("<div>").addClass("msg-outer")
+				var msgInner = $("<div>").addClass("msg-inner").html("No Data")
+				table.parent().not(":has(.msg-outer)").append(msgOuter.append(msgInner))
+
+				// toolbar.find(".page-num").val("") <-- never uncomment this loader will not load data
+				toolbar.find(".num-of-pages").html("#")
+			}
+			else table.parent().find(".msg-outer").remove()
+		},
+
 		build:function(table, data, options){
 
 			grid.buildToolbars(table, options);
-			grid.buildHeader(table, data.rows, options);
-			grid.buildBody(table, data.rows, options)
-			grid.doPlugins(table, options)
+
+			if(data.rows.length>0){
+
+				grid.buildHeader(table, data.rows, options)
+				grid.buildBody(table, data.rows, options)
+				grid.doPlugins(table, options)
+
+				grid.disableToolbar(table, false)
+			}
+			else grid.disableToolbar(table, true)
 		},
 
 		rebuildBody:function(table, data, options){
 
+			table.find("thead").remove();
 			table.find("tbody").remove();
 
 			setTimeout(function(){
 
-				grid.buildBody(table, data.rows, options);
+				if(data.rows.length>0){
 
-				table.parent().parent().find(".num-of-pages").html(options.pager.pages);
+					grid.buildHeader(table, data.rows, options)
+					grid.buildBody(table, data.rows, options);
+					grid.doPlugins(table, options)
+
+					table.parent().parent().find(".num-of-pages").html(options.pager.pages);
+
+					grid.disableToolbar(table, false)
+				}
+				else grid.disableToolbar(table, true)
 
 			}, 100)
 		},
