@@ -90,13 +90,21 @@ customLoader:function(table, options, builder){
 }
 ```
 
+## Need to know stuff
+
+If you ever need to refresh the grid programmatically:
+
+```js
+$("#employee-tbl").trigger("refresh")
+```
+
 ## Contributions
 
 Thanks a lot to the developer(s) of the plugin(s) below: 
 
 [TableHeadFixer](https://github.com/lai32290/TableHeadFixer)
 
-### Some other goodies..
+### Some goodies used in this project..
 
 ..that I used in this project.
 
