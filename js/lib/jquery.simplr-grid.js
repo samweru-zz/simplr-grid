@@ -266,7 +266,7 @@
 			])
 		},
 
-		buildToolbars:function(table, options){
+		buildToolbars:function(table, data, options){
 
 			var gridCapsule = $(document.createElement("DIV"));
 			gridCapsule.addClass("simplr-grid-capsule")
@@ -281,7 +281,13 @@
 				width:options.css.gridWidth,
 			})
 
-			table.replaceWith(gridCapsule)
+			var _options = table.data('options')
+			table.replaceWith(gridCapsule) //replace erases options
+			table.data('options', _options)
+			table.bind('refresh', function(){
+
+				grid.rebuildBody(table, data, table.data('options'));
+			})
 
 			var gridTitle = $(document.createElement("DIV"));
 			gridTitle.addClass("simplr-grid-title")
@@ -329,7 +335,7 @@
 
 		build:function(table, data, options){
 
-			grid.buildToolbars(table, options);
+			grid.buildToolbars(table, data, options);
 
 			if(data.rows.length>0){
 
@@ -456,7 +462,9 @@
 			resizeColumns:false
         };
 
-        options = $.extend({}, defaults, options);
+        options = $.extend(true, {}, defaults, options);
+
+        this.data('options', options)
 
 		return this.each(function(){
 
