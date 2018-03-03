@@ -87,7 +87,7 @@
 		],
 		css:{
 
-			gridWidth:"110%",
+			gridWidth:"1100px",
 			gridHeight:"400px",
 			capsuleWidth:"100%",
 			capsuleHeight:"600px",

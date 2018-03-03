@@ -29,11 +29,24 @@ $("#employee-tbl").simplrGrid({
     fixLeftColumn:true,
     resizeColumns:true,
     // data:[] //if you want to input data directly. Overrides Ajax
+    columns:{
+
+        "id":{name:"#", css:{display:"none"}},
+        "email":{name:"Email", css:{textDecoration:"underline"}},
+        "county":{name:"County"}, 
+        "mobile":{name:"Mobile"},
+        "address":{name:"Address"},
+        "married":{name:"Married"},
+        "employed":{name:"Employed", css:{textAlign:"right", paddingRight:"10px"}},
+        "lastname":{name:"Last Name"},
+        "firstname":{name:"First Name"}
+    },
     css:{
 
-        gridWidth:"110%",
+        gridWidth:"1100px",
         gridHeight:"400px",
         capsuleWidth:"100%",
+        capsuleHeight:"600px",
     },
     toolbars:[
 
