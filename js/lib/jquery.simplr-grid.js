@@ -286,7 +286,7 @@
 			table.data('options', _options)
 			table.bind('refresh', function(){
 
-				grid.rebuildBody(table, data, table.data('options'));
+				grid.loader(table, table.data('options'), grid.rebuildBody);
 			})
 
 			var gridTitle = $(document.createElement("DIV"));
