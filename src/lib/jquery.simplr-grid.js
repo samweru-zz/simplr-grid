@@ -1,8 +1,8 @@
 /*
- * jQuery simplrGrid - v1.2.0
+ * jQuery simplrGrid - v1.0.0
  * Javascript DataGrid
  *
- * Copyright (c) 2018 Samuel Weru
+ * Copyright (c) 2019 Samuel Weru
  * Released under the MIT license
  */
 (function($){
