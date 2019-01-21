@@ -119,7 +119,6 @@ Thanks a lot to the developer(s) of the plugin(s) below:
 
 ### Some goodies used in this project.
 
-- [Fake Ajax](https://github.com/anasnakawa/jquery.ajax.fake) - Fake a web service
 - [Taffy DB](https://github.com/typicaljoe/taffydb) - Browser in-memory database
 
 Have fun!
