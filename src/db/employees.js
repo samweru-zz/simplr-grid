@@ -1,4 +1,5 @@
-employees = TAFFY([
+employees = [
+
 	{
 		"id": 1, 
 		"email": "dena.delzell@hotmail.com",
@@ -599,4 +600,13 @@ employees = TAFFY([
 		"lastname": "Sher", 
 		"firstname": "Belle"
 	}
-]);
+];
+
+try{
+
+	employees = TAFFY(employees);
+}
+catch{
+
+	//nothing
+}

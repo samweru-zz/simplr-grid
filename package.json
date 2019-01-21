@@ -1,0 +1,31 @@
+{
+  "name": "simplr-grid-jq",
+  "version": "1.0.0",
+  "description": "datagrid",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samweru/simplr-grid.git"
+  },
+  "keywords": [
+    "datagrid",
+    "flexgrid"
+  ],
+  "author": "samweru",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samweru/simplr-grid/issues"
+  },
+  "homepage": "https://github.com/samweru/simplr-grid#readme",
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-uglify": "^3.0.1",
+    "node-sass":"^4.11.0",
+    "pump":"^3.0.0"
+  }
+}

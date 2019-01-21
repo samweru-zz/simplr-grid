@@ -13,34 +13,6 @@
 		return _employees;
 	}
 
-	window.returnData = true
-	$.ajax.fake.registerWebservice('/data/employees', function(data) {
-
-	    var start_from = ((data.page - 1) * data.rows)+1;
-
-	    var _employees = getEmployees(start_from, data.rows)
-
-	    if(window.returnData)
-	    	return {
-
-		    	success:{
-
-			    	rows:_employees,
-			    	count: employees().count()
-			    }
-			}
-		else
-		    return {
-
-			    success:{
-
-			    	rows:[],
-			    	count:0
-			    }
-		    }
-
-	}, "POST");
-
 	var button = $(document.createElement("BUTTON"));
 	var customToolbar = [
 
@@ -57,10 +29,8 @@
 	$("#employee-tbl").simplrGrid({
 
 		title:"Employees",
-		url:"/data/employees",
-		method:"POST",
 		// url:"server/fetch.all.php",
-		// method:"GET",
+		// method:"POST",
 		singleSelect:false,
 		columnHide:["id"],
 		usePager:true,
@@ -104,25 +74,40 @@
 		},
 		customLoader:function(table, options, builder){
 
-			$.ajax({
+			var page = options.pager.page;
+			var rows = options.pager.rows;
+			var count = employees().count();
 
-			    type:options.method,
-			    dataType:'json',
-			    fake: true,	// <<<---- that's it !
-			    url:options.url,
-			    data:{
+			var start_from = ((page - 1) * rows)+1;
 
-			    	page:options.pager.page,
-			    	rows:options.pager.rows
-			    }
-			})
-			.done(function(response){
+			var response = {
 
-				//total-number-of-rows/rows-per-page
-				options.pager.pages = Math.ceil(response.count/options.pager.rows);
+				rows: getEmployees(start_from, rows)
+			};
 
-				builder(table, response, options);
-			})
+	    	options.pager.pages = Math.ceil(count/options.pager.rows);
+
+			builder(table, response, options);
+
+			/********************AJAX***********************/
+			// $.ajax({
+
+		 //        type:options.method,
+		 //        dataType:'json',
+		 //        url:options.url,
+		 //        data:{
+
+		 //            page:options.pager.page,
+		 //            rows:options.pager.rows
+		 //        }
+		 //    })
+		 //    .done(function(response){
+
+		 //        //total-number-of-rows/rows-per-page
+		 //        options.pager.pages = Math.ceil(response.count/options.pager.rows);
+
+		 //        builder(table, response, options);
+		 //    })
 		}
 	})
 

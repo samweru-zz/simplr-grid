@@ -1,5 +1,0 @@
-#!/bin/bash
-
-rm js/lib/jquery.simplr-grid.min.js
-head -n 7 js/lib/jquery.simplr-grid.js > js/lib/jquery.simplr-grid.min.js
-yui-compressor js/lib/jquery.simplr-grid.js >> js/lib/jquery.simplr-grid.min.js

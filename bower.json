@@ -1,0 +1,30 @@
+{
+  "name": "simplr-grid",
+  "homepage": "https://github.com/samweru/simplr-grid",
+  "authors": [
+    "Sam Weru <samweru@gmail.com>"
+  ],
+  "description": "flex datagrid",
+  "main": "index.html",
+  "keywords": [
+    "datagrid",
+    "flexgrid",
+    "jquery",
+    "fixed-header",
+    "resize-column"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.3.1"
+  },
+  "devDependencies": {
+    "taffy": "*",
+  }
+}
