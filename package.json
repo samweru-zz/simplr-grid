@@ -1,5 +1,5 @@
 {
-  "name": "simplr-grid-jq",
+  "name": "simplr-grid",
   "version": "1.0.0",
   "description": "datagrid",
   "main": "gulpfile.js",
