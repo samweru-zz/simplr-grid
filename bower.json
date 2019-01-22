@@ -5,7 +5,10 @@
     "Sam Weru <samweru@gmail.com>"
   ],
   "description": "flex datagrid",
-  "main": "index.html",
+  "main": [
+    "src/lib/jquery.simplr-grid.js",
+    "css/style.css"
+  ],
   "keywords": [
     "datagrid",
     "flexgrid",
