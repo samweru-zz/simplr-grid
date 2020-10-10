@@ -111,6 +111,12 @@ If you ever need to refresh the grid programmatically:
 $("#employee-tbl").trigger("refresh")
 ```
 
+Refresh trigger also takes arguments for options as json ofcourse.
+
+```js
+$("#employee-tbl").trigger("refresh", options)
+```
+
 ## Contributions
 
 Thanks a lot to the developer(s) of the plugin(s) below: 
