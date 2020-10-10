@@ -4,7 +4,8 @@
   "description": "datagrid",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "postinstall": "node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@bower_components'), 'bower_components', 'junction') } catch (e) { }\""
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,14 @@
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
     "gulp-uglify": "^3.0.1",
-    "node-sass":"^4.11.0",
-    "pump":"^3.0.0"
+    "node-sass": "^4.11.0",
+    "pump": "^3.0.0"
+  },
+  "dependencies": {
+    "@bower_components/jquery": "jquery/jquery-dist#^3.3.1",
+    "@bower_components/taffy": "bahaa/taffydb#*"
+  },
+  "engines": {
+    "yarn": ">= 1.0.0"
   }
 }

@@ -284,9 +284,13 @@
 			var _options = table.data('options')
 			table.replaceWith(gridCapsule) //replace erases options
 			table.data('options', _options)
-			table.bind('refresh', function(){
+			table.bind('refresh', function(event, options){
 
-				grid.loader(table, table.data('options'), grid.rebuildBody);
+				console.log(options);
+
+				var options = $.extend(table.data('options'), options);
+
+				grid.loader(table, options, grid.rebuildBody);
 			})
 
 			var gridTitle = $(document.createElement("DIV"));

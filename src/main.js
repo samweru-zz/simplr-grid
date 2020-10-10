@@ -14,6 +14,8 @@
 	}
 
 	var button = $(document.createElement("BUTTON"));
+	var txt = $(document.createElement("INPUT"));
+
 	var customToolbar = [
 
 	    button.clone().html("Add").click(function(){
