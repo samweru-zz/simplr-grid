@@ -1,17 +1,17 @@
 (function(){
 
-	function getEmployees(start_from, rows_per_page){
+	// function getEmployees(start_from, rows_per_page){
 
-		var _employees = employees().start(start_from).limit(rows_per_page).get();
+	// 	var _employees = employees().start(start_from).limit(rows_per_page).get();
 
-	    for(idx in _employees){
+	//     for(idx in _employees){
 
-			delete _employees[idx].___id;
-			delete _employees[idx].___s;
-		}
+	// 		delete _employees[idx].___id;
+	// 		delete _employees[idx].___s;
+	// 	}
 
-		return _employees;
-	}
+	// 	return _employees;
+	// }
 
 	var button = $(document.createElement("BUTTON"));
 	var txt = $(document.createElement("INPUT"));
@@ -31,7 +31,7 @@
 	$("#employee-tbl").simplrGrid({
 
 		title:"Employees",
-		// url:"server/fetch.all.php",
+		// url:"server/getdata.php",
 		// method:"POST",
 		singleSelect:false,
 		columnHide:["id"],
@@ -78,38 +78,26 @@
 
 			var page = options.pager.page;
 			var rows = options.pager.rows;
-			var count = employees().count();
-
 			var start_from = ((page - 1) * rows)+1;
 
-			var response = {
+			$.ajax({
 
-				rows: getEmployees(start_from, rows)
-			};
+		        type:options.method,
+		        dataType:'json',
+		        url:"server/getdata.php",
+		        data:$.extend(options.filter, {
 
-	    	options.pager.pages = Math.ceil(count/options.pager.rows);
+		            start_at:start_from,
+		            page_size:options.pager.rows
+		        })
+		    })
+		    .done(function(response){
 
-			builder(table, response, options);
+		        //total-number-of-rows/rows-per-page
+		        options.pager.pages = Math.ceil(response.count/options.pager.rows);
 
-			/********************AJAX***********************/
-			// $.ajax({
-
-		 //        type:options.method,
-		 //        dataType:'json',
-		 //        url:options.url,
-		 //        data:{
-
-		 //            page:options.pager.page,
-		 //            rows:options.pager.rows
-		 //        }
-		 //    })
-		 //    .done(function(response){
-
-		 //        //total-number-of-rows/rows-per-page
-		 //        options.pager.pages = Math.ceil(response.count/options.pager.rows);
-
-		 //        builder(table, response, options);
-		 //    })
+		        builder(table, response, options);
+		    })
 		}
 	})
 

@@ -30,8 +30,7 @@
     "pump": "^3.0.0"
   },
   "dependencies": {
-    "@bower_components/jquery": "jquery/jquery-dist#^3.3.1",
-    "@bower_components/taffy": "bahaa/taffydb#*"
+    "@bower_components/jquery": "jquery/jquery-dist#^3.3.1"
   },
   "engines": {
     "yarn": ">= 1.0.0"
