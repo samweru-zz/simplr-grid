@@ -1,7 +1,5 @@
 js/data/
-server/adminer.php
 php_errors.log
-server/
 bower_components/
 node_modules/
 npm-debug.log

@@ -286,9 +286,9 @@
 			table.data('options', _options)
 			table.bind('refresh', function(event, options){
 
-				console.log(options);
-
 				var options = $.extend(table.data('options'), options);
+
+				console.log(options);
 
 				grid.loader(table, options, grid.rebuildBody);
 			})
