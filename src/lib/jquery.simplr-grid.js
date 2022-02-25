@@ -7,9 +7,9 @@
  */
 (function($){
 
-	var grid = {
+	class Grid{
 
-		addRow:function(idx, rowData, options){
+		/*****/addRow(idx, rowData, options){
 
 			var row = $(document.createElement("TR"));
 			var cell = $(document.createElement("TD"));
@@ -20,7 +20,7 @@
 				row.dblclick(options.dblClick)
 
 			row.click(function(){
- 
+
 				if(options.singleSelect){
 
 					$(this).addClass("selected").siblings().removeClass("selected");	
@@ -59,9 +59,9 @@
 			})
 
 			return row;
-		},
+		}
 
-		buildBody:function(table, data, options){
+		/*****/buildBody(table, data, options){
 
 			var pageNo = parseInt(options.pager.page);
 			var pageSize = parseInt(options.pager.rows);
@@ -70,12 +70,14 @@
 			var tbody = $(document.createElement("TBODY"));
 
 			for(idx in data)
-				tbody.append(this.addRow(startFrom++, data[idx], options));
+				tbody.append(Grid.prototype.addRow.apply(this, [
+					startFrom++, data[idx], options
+				]));
 
 			table.append(tbody);
-		},
+		}
 
-		buildHeader:function(table, rows, options){
+		/*****/buildHeader(table, rows, options){
 
 			var thead = $(document.createElement("THEAD"));
 			var th = $(document.createElement("TH"));
@@ -129,9 +131,9 @@
 				return true;
 			}
 			else return false;
-		},
+		}
 
-		addToolbar:function(arrEl){
+		/*****/addToolbar(arrEl){
 
 			var customToolBar = $(document.createElement("DIV"));
 			customToolBar.addClass("simplr-grid-toolbar");
@@ -142,9 +144,9 @@
 			})
 
 			return customToolBar;
-		},
+		}
 
-		buildPager:function(table, options){
+		/*****/buildPager(table, options){
 
 			var txtPageNum = $(document.createElement("INPUT"));
 			txtPageNum.val(options.pager.page);
@@ -156,6 +158,10 @@
 				$(cboPager).append(new Option(e))
 			});	
 
+			var _this = this;
+			var _loader = Grid.prototype.loader;
+			var _rebuildBody = Grid.prototype.rebuildBody;
+
 			cboPager.change(function(){
 				
 				options.pager.page = 1;
@@ -164,7 +170,7 @@
 
 				txtPageNum.val(options.pager.page);
 
-				grid.loader(table, options, grid.rebuildBody);
+				_loader.apply(_this, [table, options, _rebuildBody]);
 			});
 
 			var btnFirst = $(document.createElement("BUTTON"))
@@ -179,7 +185,7 @@
 
 					txtPageNum.val(options.pager.page);
 
-					grid.loader(table, options, grid.rebuildBody);
+					_loader.apply(_this, [table, options, _rebuildBody]);
 				}
 			})
 
@@ -195,7 +201,7 @@
 
 					txtPageNum.val(options.pager.page);
 
-					grid.loader(table, options, grid.rebuildBody);
+					_loader.apply(_this, [table, options, _rebuildBody]);
 				}
 			})
 
@@ -211,7 +217,7 @@
 
 					txtPageNum.val(options.pager.page);
 
-					grid.loader(table, options, grid.rebuildBody);
+					_loader.apply(_this, [table, options, _rebuildBody]);
 				}
 			})
 
@@ -227,7 +233,7 @@
 
 					txtPageNum.val(options.pager.page);
 
-					grid.loader(table, options, grid.rebuildBody);
+					_loader.apply(_this, [table, options, _rebuildBody]);
 				}
 			})
 
@@ -239,7 +245,7 @@
 
 				options.pager.page = table.parent().parent().find(".page-num").val()
 
-				grid.loader(table, options, grid.rebuildBody);
+				_loader.apply(_this, [table, options, _rebuildBody]);
 			})
 
 			var SEP = "&nbsp;|&nbsp;";
@@ -248,25 +254,26 @@
 			spanPages.addClass("num-of-pages")
 			spanPages.html(options.pager.pages);
 
-			return this.addToolbar([
+			return Grid.prototype.addToolbar.apply(this, [[
 
-				cboPager,
-				SEP,
-				btnFirst,
-				btnPrev,
-				"<span> Page </span>",
-				txtPageNum,
-				"<span> of </span>",
-				spanPages,
-				"<span>&nbsp;</span>",
-				btnNext,
-				btnLast,
-				SEP,
-				btnRefresh,
+					cboPager,
+					SEP,
+					btnFirst,
+					btnPrev,
+					"<span> Page </span>",
+					txtPageNum,
+					"<span> of </span>",
+					spanPages,
+					"<span>&nbsp;</span>",
+					btnNext,
+					btnLast,
+					SEP,
+					btnRefresh,
+				]
 			])
-		},
+		}
 
-		buildToolbars:function(table, data, options){
+		/*****/buildToolbars(table, data, options){
 
 			var gridCapsule = $(document.createElement("DIV"));
 			gridCapsule.addClass("simplr-grid-capsule")
@@ -281,6 +288,12 @@
 				width:options.css.gridWidth,
 			})
 
+			var _this = this;
+			var _rebuildBody = Grid.prototype.rebuildBody
+			var _loader = Grid.prototype.loader
+			var _addToolbar = Grid.prototype.addToolbar
+			var _buildPager = Grid.prototype.buildPager
+
 			var _options = table.data('options')
 			table.replaceWith(gridCapsule) //replace erases options
 			table.data('options', _options)
@@ -290,7 +303,7 @@
 
 				var options = $.extend(table.data('options'), options);
 
-				grid.loader(table, options, grid.rebuildBody);
+				_loader(table, options, _rebuildBody);
 			})
 
 			var gridTitle = $(document.createElement("DIV"));
@@ -308,18 +321,18 @@
 
 			$.each(options.toolbars, function(idx, toolbar){
 
-				gridCapsule.append(grid.addToolbar(toolbar));
+				gridCapsule.append(_addToolbar.apply(_this, [toolbar]));
 			})
 
 			if(options.usePager)
-				gridCapsule.append(grid.buildPager(table, options))
+				gridCapsule.append(_buildPager(table, options))
 
 			gridCapsule.append(gridInner)
 
 			gridInner.append(table)
-		},
+		}
 
-		disableToolbar:function(table, disableTBar){
+		/*****/disableToolbar(table, disableTBar){
 
 			var toolbar = table.parent().prev()
 			toolbar.find(".sg-last, .sg-next, .sg-prev, .sg-first, .page-num, select")
@@ -335,24 +348,24 @@
 				toolbar.find(".num-of-pages").html("#")
 			}
 			else table.parent().find(".msg-outer").remove()
-		},
+		}
 
-		build:function(table, data, options){
+		/*****/build(table, data, options){
 
-			grid.buildToolbars(table, data, options);
+			Grid.prototype.buildToolbars.apply(this, [table, data, options]);
 
 			if(data.rows.length>0){
 
-				grid.buildHeader(table, data.rows, options)
-				grid.buildBody(table, data.rows, options)
-				grid.doPlugins(table, options)
+				Grid.prototype.buildHeader.apply(this, [table, data.rows, options])
+				Grid.prototype.buildBody.apply(this, [table, data.rows, options])
+				Grid.prototype.doPlugins.apply(this, [table, options])
 
-				grid.disableToolbar(table, false)
+				Grid.prototype.disableToolbar.apply(this, [table, false])
 			}
-			else grid.disableToolbar(table, true)
-		},
+			else Grid.prototype.disableToolbar.apply(this, [table, true])
+		}
 
-		rebuildBody:function(table, data, options){
+		/*****/rebuildBody(table, data, options){
 
 			table.find("thead").remove();
 			table.find("tbody").remove();
@@ -361,19 +374,20 @@
 
 				if(data.rows.length>0){
 
-					grid.buildHeader(table, data.rows, options)
-					grid.buildBody(table, data.rows, options);
-					grid.doPlugins(table, options)
+					Grid.prototype.buildHeader.apply(this, [table, data.rows, options])
+					Grid.prototype.buildBody.apply(this, [table, data.rows, options]);
+					Grid.prototype.doPlugins.apply(this, [table, options])
 
 					table.parent().parent().find(".num-of-pages").html(options.pager.pages);
 
-					grid.disableToolbar(table, false)
+					Grid.prototype.disableToolbar.apply(this, [table, false])
 				}
-				else grid.disableToolbar(table, true)
+				else Grid.prototype.disableToolbar.apply(this, [table, true])
 
 			}, 100)
-		},
-		doPlugins:function(table, options){
+		}
+
+		/*****/doPlugins(table, options){
 
 			if(options.fixHeader)
 				table.fixHeader();
@@ -388,8 +402,9 @@
 
 			if(options.resizeColumns)
 				table.resizeColumns();
-		},
-		nativeLoader:function(table, options, builder){
+		}
+
+		/*****/nativeLoader(table, options, builder){
 
 			$.ajax({
 
@@ -410,28 +425,29 @@
 
 				builder(table, response, options);
 			})
-		},
-		loader:function(table, options, builder){
+		}
+
+		/*****/loader(table, options, builder){
 
 			table.addClass("simplr-grid")
 
 			if(options.data.length>0){
 
-				builder(table,{
+				builder.apply(this, [table,{
 
 					rows:options.data,
 					count:options.data.length
 
-				},options);
+				},options]);
 
-				grid.doPlugins(table, options);
+				this.doPlugins(table, options);
 			}
 			else{
 
 				if(options.customLoader)
 					options.customLoader(table, options, builder)
 				else
-					grid.nativeLoader(table, options, builder);
+					this.nativeLoader(table, options, builder);
 			}
 		}
 	}
@@ -472,6 +488,7 @@
 
 		return this.each(function(){
 
+			var grid = new Grid();
 			grid.loader($(this), options, grid.build)
 		})
 	}
