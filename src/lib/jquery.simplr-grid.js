@@ -69,10 +69,15 @@
 
 			var tbody = $(document.createElement("TBODY"));
 
-			for(idx in data)
-				tbody.append(Grid.prototype.addRow.apply(this, [
-					startFrom++, data[idx], options
+			var _this = this;
+			$.each(data, function(idx, row){
+
+				tbody.append(Grid.prototype.addRow.apply(_this, [
+
+					startFrom++, row, options
 				]));
+			})
+				
 
 			table.append(tbody);
 		}
